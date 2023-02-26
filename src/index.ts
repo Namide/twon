@@ -1,3 +1,4 @@
+export * from './types.js'
 export * from './easing/cubicBezier.js'
 export * from './easing/easing.js'
 export * from './timer/Ticker.js'

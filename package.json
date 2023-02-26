@@ -11,13 +11,14 @@
       "require": "./lib/tweenkle.umd.js"
     }
   },
-  "types": "lib/types.d.ts",
+  "types": "lib/index.d.ts",
   "files": [
     "lib"
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --project conf/tsconfig.json && vite build --config conf/vite.config.cts",
+    "build": "tsc --project conf/tsconfig.json --noEmit && vite build --config conf/vite.config.cts",
+    "postbuild": "tsc --project conf/tsconfig.json --declaration --allowJs --emitDeclarationOnly --outDir lib",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src --fix"
