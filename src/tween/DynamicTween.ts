@@ -52,7 +52,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
 
   private _getFrozenValue (time: number): Frozen {
     const nextIndex = this._frozenList.findIndex(val => val.time > time - this._startTime)
-    const index = nextIndex < 0 ? this._frozenList.length - 1 : (nextIndex - 1)
+    const index = nextIndex < 0 ? this._frozenList.length - 1 : Math.max(0, (nextIndex - 1))
     return this._frozenList[index]
   }
 
