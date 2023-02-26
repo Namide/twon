@@ -3,9 +3,9 @@ import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
 
-// function distance (from: number[], to: number[]): number {
-//   return Math.sqrt(from.reduce((total, value, index) => total + (value - to[index]) ** 2, 0))
-// }
+function distance (from: number[], to: number[]): number {
+  return Math.sqrt(from.reduce((total, value, index) => total + (value - to[index]) ** 2, 0))
+}
 
 interface Frozen {
   time: number
@@ -85,10 +85,11 @@ export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueTy
     const to = (this._isArray ? options.to : [options.to]) as number[]
     const oldEndValue = this._getEndValues()
     const deltaValue = to.map((val, index) => val - oldEndValue[index])
-    // const duration = options.duration ??  // ?? distance(oldEndValue, to) * (options.msPerUnit ?? this._options.msPerUnit as number)
+    const msPerUnit = options.msPerUnit ?? this._options.msPerUnit
+    const duration = msPerUnit !== undefined ? distance(oldEndValue, to) * msPerUnit : (options.duration ?? this._options.duration)
     const interpolate = new Interpolate({
       ...options,
-      // duration,
+      duration,
       from: to.map(() => 0),
       to: deltaValue,
       timer: this.timer,
