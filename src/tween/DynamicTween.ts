@@ -36,7 +36,7 @@ export class DynamicTween<ValueType, Options extends (TweenOptions<ValueType> & 
     this._options = {
       ...options,
       to: options.to ?? options.from,
-      msPerUnit: options.msPerUnit ?? 20
+      // msPerUnit: options.msPerUnit ?? 20
     } as unknown as Options
 
     this._isArray = Array.isArray(options.from)
@@ -85,10 +85,10 @@ export class DynamicTween<ValueType, Options extends (TweenOptions<ValueType> & 
     const to = (this._isArray ? options.to : [options.to]) as number[]
     const oldEndValue = this._getEndValues()
     const deltaValue = to.map((val, index) => val - oldEndValue[index])
-    const duration = options.duration ?? distance(oldEndValue, to) * (options.msPerUnit ?? this._options.msPerUnit as number)
+    // const duration = options.duration ??  // ?? distance(oldEndValue, to) * (options.msPerUnit ?? this._options.msPerUnit as number)
     const interpolate = new Interpolate({
       ...(options as Options),
-      duration,
+      // duration,
       from: to.map(() => 0),
       to: deltaValue,
       timer: this.timer,
