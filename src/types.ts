@@ -8,9 +8,7 @@ export interface TweenOptions<ValueType> {
   to: ValueType & (number | number[])
 }
 
-export interface DynamicTweenOptions {
-  msPerUnit?: number
-}
+export interface DynamicTweenOptions<ValueType> extends TweenOptions<ValueType>, InterpolateOptions<ValueType> { }
 
 export type TweenEvent = 'play' | 'pause' | 'end' | 'start' | 'update'
 

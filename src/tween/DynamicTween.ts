@@ -3,9 +3,9 @@ import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
 
-function distance (from: number[], to: number[]): number {
-  return Math.sqrt(from.reduce((total, value, index) => total + (value - to[index]) ** 2, 0))
-}
+// function distance (from: number[], to: number[]): number {
+//   return Math.sqrt(from.reduce((total, value, index) => total + (value - to[index]) ** 2, 0))
+// }
 
 interface Frozen {
   time: number
@@ -16,28 +16,28 @@ type InterpolateOptionsType = TweenOptions<number[]> & InterpolateOptions<number
 
 type InterpolateType = Interpolate<InterpolateOptionsType>
 
-export class DynamicTween<ValueType, Options extends (TweenOptions<ValueType> & InterpolateOptions<ValueType> & DynamicTweenOptions)> extends Emit<EmitCallback<'update', ValueType> | EmitCallback<TickerEvent, void>> implements TweenType<ValueType> {
+export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueType> | EmitCallback<TickerEvent, void>> implements TweenType<ValueType> {
   isStarted = false
   isEnded = false
 
   private _timer: TickerType | null = null
 
   private _startTime: number = 0
-  private readonly _options: Options
+  private readonly _options: DynamicTweenOptions<ValueType>
 
   private readonly _frozenList: Frozen[]
   private readonly _isArray: boolean
 
   private readonly interpolates: InterpolateType[]
 
-  constructor (options: Omit<Options, 'to'> & { to?: ValueType } & { from: ValueType }) {
+  constructor (options: Omit<DynamicTweenOptions<ValueType>, 'to'> & { to?: ValueType } & { from: ValueType }) {
     super()
 
     this._options = {
       ...options,
       to: options.to ?? options.from,
       // msPerUnit: options.msPerUnit ?? 20
-    } as unknown as Options
+    } as DynamicTweenOptions<ValueType>
 
     this._isArray = Array.isArray(options.from)
 
@@ -51,7 +51,7 @@ export class DynamicTween<ValueType, Options extends (TweenOptions<ValueType> & 
     this.timer = options.timer ?? (globalTicker as TickerType)
     this._frozenList = [{ time: this.timer.time, value: this._isArray ? [...(options.from as number[])] : [options.from as number] }]
     if (options.to !== undefined) {
-      this.change(options as Options)
+      this.change(options as DynamicTweenOptions<ValueType>)
     }
   }
 
@@ -81,19 +81,19 @@ export class DynamicTween<ValueType, Options extends (TweenOptions<ValueType> & 
     return this._frozenList[this._frozenList.length - 1].value
   }
 
-  change (options: Omit<Options, 'from'>): this {
+  change (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
     const to = (this._isArray ? options.to : [options.to]) as number[]
     const oldEndValue = this._getEndValues()
     const deltaValue = to.map((val, index) => val - oldEndValue[index])
     // const duration = options.duration ??  // ?? distance(oldEndValue, to) * (options.msPerUnit ?? this._options.msPerUnit as number)
     const interpolate = new Interpolate({
-      ...(options as Options),
+      ...options,
       // duration,
       from: to.map(() => 0),
       to: deltaValue,
       timer: this.timer,
       delay: (options.delay ?? 0) + this.timer.time - this._startTime
-    }) as InterpolateType
+    } as DynamicTweenOptions<ValueType>) as InterpolateType
 
     this.interpolates.push(interpolate)
     this._updateFrozen(interpolate.delay + interpolate.duration, deltaValue)

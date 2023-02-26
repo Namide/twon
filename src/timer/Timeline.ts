@@ -11,11 +11,11 @@ export class Timeline extends Emit<EmitCb> implements TickerType {
 
   autoDispose = false
 
-  isPlaying = false
-  isLooping = false
-  autoReverse = true
-  speed = 1
-  duration = 0
+  isPlaying: boolean
+  isLooping: boolean
+  autoReverse: boolean
+  speed: number
+  duration: number
 
   constructor ({ loop = false, play = true, speed = 1, duration = 0, autoReverse = false } = {}) {
     super()
