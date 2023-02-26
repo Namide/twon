@@ -1,4 +1,4 @@
-import { type TweenType, type TickerType, type TweenOptions, TweenEmitCallback } from '../types.js'
+import { type TweenType, type TickerType, type TweenOptions, type TweenEmitCallback } from '../types.js'
 import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
