@@ -1,0 +1,59 @@
+{
+  "name": "tweenkle",
+  "version": "0.0.1",
+  "description": "Tween js/ts library with timeline and cubic bezier support",
+  "type": "module",
+  "main": "./lib/tweenkle.umd.js",
+  "module": "./lib/tweenkle.es.js",
+  "exports": {
+    ".": {
+      "import": "./lib/tweenkle.es.js",
+      "require": "./lib/tweenkle.umd.js"
+    }
+  },
+  "types": "lib/types.d.ts",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --project conf/tsconfig.json && vite build --config conf/vite.config.cts",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Namide/tween.git"
+  },
+  "keywords": [
+    "animation",
+    "tween",
+    "interpolation",
+    "motion",
+    "easing",
+    "javascript",
+    "typescript",
+    "tweening",
+    "cubic-bezier",
+    "timeline"
+  ],
+  "author": "damien@doussaud.fr",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Namide/tween/issues"
+  },
+  "homepage": "https://github.com/Namide/tween#readme",
+  "devDependencies": {
+    "@types/node": "^18.11.19",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "eslint": "^8.33.0",
+    "eslint-config-standard-with-typescript": "^34.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "terser": "^5.16.3",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.0"
+  }
+}
