@@ -1,20 +1,20 @@
-import { type InterpolateOptions, type TweenType, type TickerType, type EmitCallback, type TickerEvent, type TweenOptions } from '../types.js'
+import { type TweenType, type TickerType, type TweenOptions, TweenEmitCallback } from '../types.js'
 import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
 
-export class Tween<Options extends (TweenOptions<Options['from']> & InterpolateOptions<Options['from']>)> extends Emit<EmitCallback<'update', Options['from']> | EmitCallback<TickerEvent, void>> implements TweenType<Options['from']> {
+export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
   isStarted = false
   isEnded = false
 
   private _timer: TickerType | null = null
 
   private _startTime: number = 0
-  private readonly _options: Options
+  private readonly _options: TweenOptions<ValueType>
 
-  interpolate: Interpolate<Options>
+  interpolate: Interpolate<ValueType>
 
-  constructor (options: Options) {
+  constructor (options: TweenOptions<ValueType>) {
     super()
 
     this._options = { ...options }
@@ -25,7 +25,7 @@ export class Tween<Options extends (TweenOptions<Options['from']> & InterpolateO
     this.on('update', this._options.onUpdate)
     this.on('end', this._options.onEnd)
 
-    this.interpolate = new Interpolate<Options>(options)
+    this.interpolate = new Interpolate<ValueType>(options)
     this.timer = options.timer ?? (globalTicker as TickerType)
   }
 
@@ -51,7 +51,7 @@ export class Tween<Options extends (TweenOptions<Options['from']> & InterpolateO
     }
   }
 
-  getValue (time: number): Options['from'] {
+  getValue (time: number): ValueType {
     return this.interpolate.getValue(time - this._startTime)
   }
 

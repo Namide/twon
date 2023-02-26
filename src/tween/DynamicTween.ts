@@ -1,4 +1,4 @@
-import { type InterpolateOptions, type TickerType, type EmitCallback, type TweenOptions, type TickerEvent, type TweenType, type DynamicTweenOptions } from '../types.js'
+import { type TickerType, type TweenType, type DynamicTweenOptions, TweenEmitCallback } from '../types.js'
 import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
@@ -12,11 +12,7 @@ interface Frozen {
   value: number[]
 }
 
-type InterpolateOptionsType = TweenOptions<number[]> & InterpolateOptions<number[]>
-
-type InterpolateType = Interpolate<InterpolateOptionsType>
-
-export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueType> | EmitCallback<TickerEvent, void>> implements TweenType<ValueType> {
+export class DynamicTween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
   isStarted = false
   isEnded = false
 
@@ -28,7 +24,7 @@ export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueTy
   private readonly _frozenList: Frozen[]
   private readonly _isArray: boolean
 
-  private readonly interpolates: InterpolateType[]
+  private readonly interpolates: Interpolate<number[]>[] = []
 
   constructor (options: Omit<DynamicTweenOptions<ValueType>, 'to'> & { to?: ValueType } & { from: ValueType }) {
     super()
@@ -47,7 +43,6 @@ export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueTy
     this.on('update', this._options.onUpdate)
     this.on('end', this._options.onEnd)
 
-    this.interpolates = []
     this.timer = options.timer ?? (globalTicker as TickerType)
     this._frozenList = [{ time: this.timer.time, value: this._isArray ? [...(options.from as number[])] : [options.from as number] }]
     if (options.to !== undefined) {
@@ -92,9 +87,8 @@ export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueTy
       duration,
       from: to.map(() => 0),
       to: deltaValue,
-      timer: this.timer,
       delay: (options.delay ?? 0) + this.timer.time - this._startTime
-    } as DynamicTweenOptions<ValueType>) as InterpolateType
+    })
 
     this.interpolates.push(interpolate)
     this._updateFrozen(interpolate.delay + interpolate.duration, deltaValue)
@@ -157,7 +151,7 @@ export class DynamicTween<ValueType> extends Emit<EmitCallback<'update', ValueTy
     return this.interpolates
       .filter(int => currentTime > int.delay && currentTime < int.delay + int.duration)
       .reduce((values, interpolate) => {
-        const newValues = interpolate.getValue(currentTime) as number[]
+        const newValues = interpolate.getValue(currentTime)
         return values.map((value, i) => value + newValues[i])
       }, frozen)
   }
