@@ -18,7 +18,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
 
   private _timer: TickerType | null = null
 
-  private _startTime: number = 0
+  private _startTime: number = 0 // Started time of the dynamic tween in the timer
   private readonly _options: DynamicTweenOptions<ValueType>
 
   private readonly _frozenList: Frozen[]
@@ -51,7 +51,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   private _getFrozenValue (time: number): Frozen {
-    const nextIndex = this._frozenList.findIndex(val => val.time > time - this._startTime)
+    const nextIndex = this._frozenList.findIndex(val => val.time > time)
     const index = nextIndex < 0 ? this._frozenList.length - 1 : (nextIndex - 1)
     return this._frozenList[index]
   }
@@ -87,7 +87,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
       duration,
       from: to.map(() => 0),
       to: deltaValue,
-      delay: (options.delay ?? 0) + this.timer.time - this._startTime
+      delay: (options.delay ?? 0) + this.timer.time
     })
 
     this.interpolates.push(interpolate)
@@ -101,7 +101,9 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   set timer (timer: TickerType | null) {
+    let oldTime = 0
     if (this._timer !== null) {
+      oldTime = this._timer.time
       this._timer.off('update', this._update)
       this._timer.off('play', this._options.onPlay)
       this._timer.off('pause', this._options.onPause)
@@ -114,7 +116,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
       this._timer.on('play', this._options.onPlay)
       this._timer.on('pause', this._options.onPause)
 
-      this._startTime = this.timer.time
+      this._startTime += this.timer.time - oldTime
     }
   }
 
@@ -141,17 +143,16 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   private _getValues (time: number): number[] {
-    const currentTime = time - this._startTime
-    const frozen = this._getFrozenValue(currentTime).value
+    const frozen = this._getFrozenValue(time).value
 
     if (this.timer.autoDispose) {
-      this._autoDispose(currentTime)
+      this._autoDispose(time)
     }
 
     return this.interpolates
-      .filter(int => currentTime > int.delay && currentTime < int.delay + int.duration)
+      .filter(int => time > int.delay && time < int.delay + int.duration)
       .reduce((values, interpolate) => {
-        const newValues = interpolate.getValue(currentTime)
+        const newValues = interpolate.getValue(time)
         return values.map((value, i) => value + newValues[i])
       }, frozen)
   }

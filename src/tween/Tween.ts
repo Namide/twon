@@ -34,7 +34,9 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
   }
 
   set timer (timer: TickerType | null) {
+    let oldTime = 0
     if (this._timer !== null) {
+      oldTime = this._timer.time
       this._timer.off('update', this._update)
       this._timer.off('play', this._options.onPlay)
       this._timer.off('pause', this._options.onPause)
@@ -47,12 +49,12 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
       this._timer.on('play', this._options.onPlay)
       this._timer.on('pause', this._options.onPause)
 
-      this._startTime = this.timer.time
+      this._startTime += this.timer.time - oldTime
     }
   }
 
   getValue (time: number): ValueType {
-    return this.interpolate.getValue(time - this._startTime)
+    return this.interpolate.getValue(time)
   }
 
   dispose (): void {
@@ -71,7 +73,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     // After
     if (time > this._startTime + this.interpolate.delay + this.interpolate.duration) {
       if (!this.isEnded) {
-        const value = this.getValue(time)
+        const value = this.getValue(time - this._startTime)
         this.emit('update', value)
         this.emit('end', value)
         this.isEnded = true
@@ -83,7 +85,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     }
 
     // During
-    const value = this.getValue(time)
+    const value = this.getValue(time - this._startTime)
     if (!this.isStarted) { // Start
       this.isStarted = true
       this.emit('start', value)
