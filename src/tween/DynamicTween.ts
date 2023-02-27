@@ -43,7 +43,8 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     this.on('update', this._options.onUpdate)
     this.on('end', this._options.onEnd)
 
-    this.timer = options.timer ?? (globalTicker as TickerType)
+    this.timer = (options.timer === undefined) ? (globalTicker) : options.timer
+
     this._frozenList = [{ time: this.timer.time, value: this._isArray ? [...(options.from as number[])] : [options.from as number] }]
     if (options.to !== undefined) {
       this.change(options as DynamicTweenOptions<ValueType>)

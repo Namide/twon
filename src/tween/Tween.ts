@@ -26,7 +26,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     this.on('end', this._options.onEnd)
 
     this.interpolate = new Interpolate<ValueType>(options)
-    this.timer = options.timer ?? (globalTicker as TickerType)
+    this.timer = (options.timer === undefined) ? (globalTicker) : options.timer
   }
 
   get timer (): TickerType {

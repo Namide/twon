@@ -11,7 +11,7 @@ export interface InterpolateOptions<ValueType> {
 }
 
 export interface TweenOptions<ValueType> extends InterpolateOptions<ValueType> {
-  timer?: TickerType
+  timer?: TickerType | null
 
   onStart?: () => void
   onUpdate?: (value: ValueType) => void
