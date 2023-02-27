@@ -45,7 +45,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
 
     this.timer = (options.timer === undefined) ? (globalTicker) : options.timer
 
-    this._frozenList = [{ time: this.timer.time, value: this._isArray ? [...(options.from as number[])] : [options.from as number] }]
+    this._frozenList = [{ time: this.timer?.time ?? 0, value: this._isArray ? [...(options.from as number[])] : [options.from as number] }]
     if (options.to !== undefined) {
       this.change(options as DynamicTweenOptions<ValueType>)
     }
@@ -98,7 +98,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   change (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
-    return this._addInterpolate({ ...options, delay: (options.delay ?? 0) + this.timer.time })
+    return this._addInterpolate({ ...options, delay: (options.delay ?? 0) + (this.timer?.time ?? 0) })
   }
 
   chain (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
@@ -106,8 +106,8 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     return this._addInterpolate({ ...options, delay: (options.delay ?? 0) + oldEnd.time })
   }
 
-  get timer (): TickerType {
-    return this._timer as TickerType
+  get timer (): TickerType | null {
+    return this._timer
   }
 
   set timer (timer: TickerType | null) {
@@ -126,7 +126,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
       this._timer.on('play', this._options.onPlay)
       this._timer.on('pause', this._options.onPause)
 
-      this._startTime += this.timer.time - oldTime
+      this._startTime += (this.timer?.time ?? 0) - oldTime
     }
   }
 
@@ -155,7 +155,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   private _getValues (time: number): number[] {
     const frozen = this._getFrozen(time).value
 
-    if (this.timer.autoDispose) {
+    if (this.timer?.autoDispose) {
       this._autoDispose(time)
     }
 

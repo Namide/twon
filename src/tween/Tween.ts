@@ -26,11 +26,11 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     this.on('end', this._options.onEnd)
 
     this.interpolate = new Interpolate<ValueType>(options)
-    this.timer = (options.timer === undefined) ? (globalTicker) : options.timer
+    this.timer = (options.timer === undefined) ? globalTicker : options.timer
   }
 
-  get timer (): TickerType {
-    return this._timer as TickerType
+  get timer (): TickerType | null {
+    return this._timer
   }
 
   set timer (timer: TickerType | null) {
@@ -49,7 +49,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
       this._timer.on('play', this._options.onPlay)
       this._timer.on('pause', this._options.onPause)
 
-      this._startTime += this.timer.time - oldTime
+      this._startTime += (this.timer?.time ?? 0) - oldTime
     }
   }
 
@@ -77,7 +77,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
         this.emit('update', value)
         this.emit('end', value)
         this.isEnded = true
-        if (this.timer.autoDispose) {
+        if (this.timer?.autoDispose) {
           this.dispose()
         }
       }
