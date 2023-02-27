@@ -60,6 +60,17 @@ export class Timeline extends Emit<EmitCb> implements TickerType {
     return this
   }
 
+  restart (): this {
+    this.time = 0
+    if (!this.isPlaying) {
+      this.isPlaying = true
+      this.emit('play')
+    }
+    cancelAnimationFrame(this._id)
+    this._id = requestAnimationFrame(() => this.tick())
+    return this
+  }
+
   tick (): this {
     if (this.isPlaying) {
       const now = Date.now()

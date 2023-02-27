@@ -50,14 +50,14 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     }
   }
 
-  private _getFrozenValue (time: number): Frozen {
+  private _getFrozen (time: number): Frozen {
     const nextIndex = this._frozenList.findIndex(val => val.time > time)
     const index = nextIndex < 0 ? this._frozenList.length - 1 : (nextIndex - 1)
     return this._frozenList[index]
   }
 
-  private _updateFrozen (time: number, delta: number[]): void {
-    const value = this._getFrozenValue(time).value
+  private _addFrozen (time: number, delta: number[]): void {
+    const value = this._getFrozen(time).value
     const newFrozen = {
       time,
       value: value.map((val, i) => val + delta[i])
@@ -72,13 +72,13 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     this._frozenList.sort((a, b) => a.time - b.time)
   }
 
-  private _getEndValues (): number[] {
-    return this._frozenList[this._frozenList.length - 1].value
+  private _getEndFrozen (): Frozen {
+    return this._frozenList[this._frozenList.length - 1]
   }
 
-  change (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
+  private _addInterpolate (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
     const to = (this._isArray ? options.to : [options.to]) as number[]
-    const oldEndValue = this._getEndValues()
+    const oldEndValue = this._getEndFrozen().value
     const deltaValue = to.map((val, index) => val - oldEndValue[index])
     const msPerUnit = options.msPerUnit ?? this._options.msPerUnit
     const duration = msPerUnit !== undefined ? distance(oldEndValue, to) * msPerUnit : (options.duration ?? this._options.duration)
@@ -87,13 +87,22 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
       duration,
       from: to.map(() => 0),
       to: deltaValue,
-      delay: (options.delay ?? 0) + this.timer.time
+      delay: (options.delay ?? 0)
     })
 
     this.interpolates.push(interpolate)
-    this._updateFrozen(interpolate.delay + interpolate.duration, deltaValue)
+    this._addFrozen(interpolate.delay + interpolate.duration, deltaValue)
 
     return this
+  }
+
+  change (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
+    return this._addInterpolate({ ...options, delay: (options.delay ?? 0) + this.timer.time })
+  }
+
+  chain (options: Omit<DynamicTweenOptions<ValueType>, 'from'>): this {
+    const oldEnd = this._getEndFrozen()
+    return this._addInterpolate({ ...options, delay: (options.delay ?? 0) + oldEnd.time })
   }
 
   get timer (): TickerType {
@@ -134,7 +143,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
       intToDestroy = this.interpolates.findIndex(int => currentTime > int.delay + int.duration)
     }
 
-    const currentFrozen = this._getFrozenValue(currentTime)
+    const currentFrozen = this._getFrozen(currentTime)
     let frozenToDestroy = this._frozenList.findIndex(frozen => frozen.time < currentFrozen.time)
     while (frozenToDestroy > -1) {
       this._frozenList.splice(frozenToDestroy, 1)
@@ -143,7 +152,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   private _getValues (time: number): number[] {
-    const frozen = this._getFrozenValue(time).value
+    const frozen = this._getFrozen(time).value
 
     if (this.timer.autoDispose) {
       this._autoDispose(time)
