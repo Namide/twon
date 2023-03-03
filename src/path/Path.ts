@@ -10,20 +10,21 @@ function _lerpUnit<Units extends number[]> (from: Units, to: Units, t: number) {
 
 function _getDistances<Units extends number[]> (path: Units[]) {
   const distances: number[] = []
-  const distance = 0
+  let distance = 0
+  
 
   for (let i = 1; i < path.length; i++) {
     const prev = path[i - 1]
     const next = path[i]
 
-    let distance = 0
+    let dist = 0
     for (let unit = 0; unit < prev.length; unit++) {
-      distance += (next[unit] - prev[unit]) ** 2 
+      dist += (next[unit] - prev[unit]) ** 2 
     }
-    distance = Math.sqrt(distance)
+    dist = Math.sqrt(dist)
 
-    distance += distance
-    distances.push(distance)
+    distance += dist
+    distances.push(dist)
   }
 
   return {
@@ -32,28 +33,30 @@ function _getDistances<Units extends number[]> (path: Units[]) {
   }
 }
 
-export function Path<Units extends number[]> (path: Units[]): PathType<Units> {
-  const { distances, distance } = _getDistances(path)
+export function Path<Units extends number[]> (path: Units[], { loop = false } = {}): PathType<Units> {
+  const newPath = loop ? [...path, path[0]] : path
+  
+  const { distances, distance } = _getDistances(newPath)
 
   const getPath = (x: number) => {
     if (x <= 0) {
-      return path[0]
+      return newPath[0]
     }
 
     if (x >= 1) {
-      return path[path.length - 1]
+      return newPath[newPath.length - 1]
     }
 
     for (let i = 0, start = 0; i < distances.length; i++) {
       const current = distances[i]
-      if (x > start + current) {
+      if (x < start + current) {
         const v = (x - start) / current
-        return _lerpUnit(path[i], path[i + 1], v)
+        return _lerpUnit(newPath[i], newPath[i + 1], v)
       }
       start += current
     }
 
-    return path[0]
+    return newPath[0]
   }
 
   getPath.distance = distance
