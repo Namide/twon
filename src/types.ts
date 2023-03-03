@@ -49,3 +49,8 @@ export interface TickerType extends EmitType<TickerEvent> {
 export interface EmitCallback<Event extends string, Arg> { event: Event, callback: (arg: Arg) => void }
 
 export type TweenEmitCallback<ValueType> = EmitCallback<'update', ValueType> | EmitCallback<TickerEvent, void>
+
+export type PathType<Units> = {
+  (x: number): Units;
+  distance: number;
+}
