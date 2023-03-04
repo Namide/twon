@@ -1,4 +1,4 @@
-import { PathType, TweenPathInput } from "../types";
+import { type  PathType, type TweenPathInput } from "../types";
 import { FromToPath } from "./FromToPath";
 import { Path } from "./Path";
 

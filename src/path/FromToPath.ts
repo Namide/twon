@@ -1,4 +1,4 @@
-import { FromToRawPath, type PathType } from "../types"
+import { type FromToRawPath, type PathType } from "../types"
 
 export function FromToPath ([from, to]: FromToRawPath): PathType {
 
