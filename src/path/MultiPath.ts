@@ -1,6 +1,6 @@
 import { type PathType } from "../types"
 
-export function MultiPath<Units extends number[]> (...paths: PathType<Units>[]): PathType<Units> {
+export function MultiPath<ValueType extends number[]> (...paths: PathType<ValueType>[]): PathType<ValueType> {
   const distance = paths.reduce((total, path) => total + path.distance, 0)
 
   const getPath = (x: number) => {

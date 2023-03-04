@@ -1,14 +1,14 @@
 import { type PathType } from "../types"
 
-function _lerpUnit<Units extends number[]> (from: Units, to: Units, t: number) {
-  const values = [] as unknown as Units
+function _lerpUnit<ValueType extends number[]> (from: ValueType, to: ValueType, t: number) {
+  const values = [] as unknown as ValueType
   for (let i = 0; i < from.length; i++) {
     values.push((to[i] - from[i]) * t + from[i])
   }
   return values
 }
 
-function _getDistances<Units extends number[]> (path: Units[]) {
+function _getDistances<ValueType extends number[]> (path: ValueType[]) {
   const distances: number[] = []
   let distance = 0
   
@@ -33,7 +33,7 @@ function _getDistances<Units extends number[]> (path: Units[]) {
   }
 }
 
-export function Path<Units extends number[]> (path: Units[], { loop = false } = {}): PathType<Units> {
+export function Path<ValueType extends number[]> (path: ValueType[], { loop = false } = {}): PathType<ValueType> {
   const newPath = loop ? [...path, path[0]] : path
   
   const { distances, distance } = _getDistances(newPath)

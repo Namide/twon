@@ -17,6 +17,12 @@ export interface InterpolateOptions<ValueType> {
   to: ValueType
 }
 
+export interface InterpolatePathOptions {
+  duration?: number
+  delay?: number
+  ease?: Easing
+}
+
 export interface TweenOptions<ValueType> extends InterpolateOptions<ValueType> {
   timer?: TickerType | null
 

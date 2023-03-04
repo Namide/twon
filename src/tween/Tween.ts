@@ -6,13 +6,11 @@ import { Emit } from '../core/Emit.js'
 export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
   isStarted = false
   isEnded = false
+  interpolate: InterpolateType<ValueType>
 
   private _timer: TickerType | null = null
-
   private _startTime: number = 0
   private readonly _options: TweenOptions<ValueType>
-
-  interpolate: InterpolateType<ValueType>
 
   constructor (options: TweenOptions<ValueType>) {
     super()
