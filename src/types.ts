@@ -1,5 +1,12 @@
 export type Easing = (progress: number) => number
 
+export interface InterpolateType<ValueType> {
+  duration: number;
+  delay: number;
+  ease: Easing;
+  getValue: (time: number) => ValueType
+}
+
 export type TweenEvent = 'play' | 'pause' | 'end' | 'start' | 'update'
 
 export interface InterpolateOptions<ValueType> {
@@ -50,7 +57,7 @@ export interface EmitCallback<Event extends string, Arg> { event: Event, callbac
 
 export type TweenEmitCallback<ValueType> = EmitCallback<'update', ValueType> | EmitCallback<TickerEvent, void>
 
-export type PathType<Units> = {
-  (x: number): Units;
+export type PathType<Value> = {
+  (x: number): Value;
   distance: number;
 }

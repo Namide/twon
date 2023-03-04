@@ -1,7 +1,7 @@
-import { type InterpolateOptions, type Easing } from '../types.js'
+import { type InterpolateOptions, type Easing, type InterpolateType } from '../types.js'
 import { easeInOutSine } from '../easing/easing.js'
 
-export class Interpolate<ValueType extends (number | number[])> {
+export class Interpolate<ValueType extends (number | number[])> implements InterpolateType<ValueType> {
   from: number[]
   to: number[]
   duration: number
