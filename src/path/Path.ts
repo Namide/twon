@@ -1,14 +1,14 @@
 import { type PathType } from "../types"
 
-function _lerpUnit<ValueType extends number[]> (from: ValueType, to: ValueType, t: number) {
-  const values = [] as unknown as ValueType
+function _lerpUnit (from: number[], to: number[], t: number) {
+  const values: number[] = []
   for (let i = 0; i < from.length; i++) {
     values.push((to[i] - from[i]) * t + from[i])
   }
   return values
 }
 
-function _getDistances<ValueType extends number[]> (path: ValueType[]) {
+function _getDistances(path: number[][]) {
   const distances: number[] = []
   let distance = 0
   
@@ -33,24 +33,24 @@ function _getDistances<ValueType extends number[]> (path: ValueType[]) {
   }
 }
 
-export function Path<ValueType extends number[]> (path: ValueType[], { loop = false } = {}): PathType<ValueType> {
+export function Path (path: number[][], { loop = false } = {}): PathType {
   const newPath = loop ? [...path, path[0]] : path
   
   const { distances, distance } = _getDistances(newPath)
 
-  const getPath = (x: number) => {
-    if (x <= 0) {
+  const getPath = (progress: number) => {
+    if (progress <= 0) {
       return newPath[0]
     }
 
-    if (x >= 1) {
+    if (progress >= 1) {
       return newPath[newPath.length - 1]
     }
 
     for (let i = 0, start = 0; i < distances.length; i++) {
       const current = distances[i]
-      if (x < start + current) {
-        const v = (x - start) / current
+      if (progress < start + current) {
+        const v = (progress - start) / current
         return _lerpUnit(newPath[i], newPath[i + 1], v)
       }
       start += current

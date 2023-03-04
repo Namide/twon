@@ -4,26 +4,23 @@ export interface InterpolateType<ValueType> {
   duration: number;
   delay: number;
   ease: Easing;
+  path: PathType
   getValue: (time: number) => ValueType
 }
 
 export type TweenEvent = 'play' | 'pause' | 'end' | 'start' | 'update'
 
-export interface InterpolateOptions<ValueType> {
-  duration?: number
-  delay?: number
-  ease?: Easing
-  from: ValueType
-  to: ValueType
-}
+export type FromToRawPath = [number[], number[]]
+export type RawPath = number[][]
+export type TweenPathInput<ValueType extends number | number[]> = [ValueType, ValueType] | ValueType[] | FromToRawPath | RawPath | PathType
 
-export interface InterpolatePathOptions {
+export interface InterpolateOptions {
   duration?: number
   delay?: number
   ease?: Easing
 }
 
-export interface TweenOptions<ValueType> extends InterpolateOptions<ValueType> {
+export interface TweenOptions<ValueType> extends InterpolateOptions {
   timer?: TickerType | null
 
   onStart?: () => void
@@ -33,7 +30,7 @@ export interface TweenOptions<ValueType> extends InterpolateOptions<ValueType> {
   onPlay?: () => void
 }
 
-export interface DynamicTweenOptions<ValueType> extends TweenOptions<ValueType>, InterpolateOptions<ValueType> {
+export interface DynamicTweenOptions<ValueType> extends TweenOptions<ValueType>, InterpolateOptions {
   msPerUnit?: number
 }
 
@@ -63,7 +60,8 @@ export interface EmitCallback<Event extends string, Arg> { event: Event, callbac
 
 export type TweenEmitCallback<ValueType> = EmitCallback<'update', ValueType> | EmitCallback<TickerEvent, void>
 
-export type PathType<Value> = {
-  (x: number): Value;
+export type PathType = {
+  (x: number): number[];
   distance: number;
+  wasNumberList?: true
 }

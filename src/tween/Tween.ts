@@ -1,4 +1,4 @@
-import { type TweenType, type TickerType, type TweenOptions, type TweenEmitCallback, type InterpolateType } from '../types.js'
+import { type TweenType, type TickerType, type TweenOptions, type TweenEmitCallback, type InterpolateType, TweenPathInput } from '../types.js'
 import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
@@ -12,7 +12,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
   private _startTime: number = 0
   private readonly _options: TweenOptions<ValueType>
 
-  constructor (options: TweenOptions<ValueType>) {
+  constructor (rawPath: TweenPathInput<ValueType>, options: TweenOptions<ValueType> = {}) {
     super()
 
     this._options = { ...options }
@@ -23,7 +23,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     this.on('update', this._options.onUpdate)
     this.on('end', this._options.onEnd)
 
-    this.interpolate = new Interpolate<ValueType>(options)
+    this.interpolate = new Interpolate<ValueType>(rawPath, options)
     this.timer = (options.timer === undefined) ? globalTicker : options.timer
   }
 
