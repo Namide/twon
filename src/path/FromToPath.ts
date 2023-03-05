@@ -1,6 +1,12 @@
-import { type FromToRawPath, type PathType } from "../types"
+import { type FromToRawPath, type PathType } from "../types.js"
+import { cleanPathNumber } from "./pathHelper.js"
 
-export function FromToPath ([from, to]: FromToRawPath): PathType {
+/**
+ * Path with only 2 values
+ */
+export function FromToPath (path: FromToRawPath): PathType {
+
+  const { path: [from, to], wasNumberList } = cleanPathNumber(path)
 
   const getPath = (x: number) => {
     if (x <= 0) {
@@ -21,6 +27,7 @@ export function FromToPath ([from, to]: FromToRawPath): PathType {
   }
 
   getPath.distance = -1
+  getPath.wasNumberList = wasNumberList
 
   return getPath
 }

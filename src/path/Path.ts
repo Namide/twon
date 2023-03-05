@@ -1,4 +1,5 @@
-import { type PathType } from "../types"
+import { type PathType } from "../types.js"
+import { cleanPathNumber } from "./pathHelper.js"
 
 function _lerpUnit (from: number[], to: number[], t: number) {
   const values: number[] = []
@@ -11,7 +12,6 @@ function _lerpUnit (from: number[], to: number[], t: number) {
 function _getDistances(path: number[][]) {
   const distances: number[] = []
   let distance = 0
-  
 
   for (let i = 1; i < path.length; i++) {
     const prev = path[i - 1]
@@ -34,8 +34,8 @@ function _getDistances(path: number[][]) {
 }
 
 export function Path (path: number[][], { loop = false } = {}): PathType {
-  const newPath = loop ? [...path, path[0]] : path
-  
+
+  const { path: newPath, wasNumberList } = cleanPathNumber(loop ? [...path, path[0]] : path)
   const { distances, distance } = _getDistances(newPath)
 
   const getPath = (progress: number) => {
@@ -60,6 +60,7 @@ export function Path (path: number[][], { loop = false } = {}): PathType {
   }
 
   getPath.distance = distance
+  getPath.wasNumberList = wasNumberList
 
   return getPath
 }

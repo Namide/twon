@@ -8,7 +8,6 @@ export class Ticker extends Emit<EmitCb> implements TickerType {
   private _last: number
 
   time: number
-  // callbacks: Array<{ event: TickerEvent, callback: (time: number) => void }> = []
 
   private _isEnabled = false
   autoDispose = true

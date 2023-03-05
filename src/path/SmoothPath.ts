@@ -1,7 +1,7 @@
-import { type PathType } from "../types"
-import { Path } from "./Path"
+import { type PathType } from "../types.js"
+import { Path } from "./Path.js"
 
-function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }): number[][] {
+function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }: { step: number, keepStart: boolean, keepEnd: boolean, loop: boolean }): number[][] {
   if (step < 1) {
     return path
   }
@@ -11,8 +11,8 @@ function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }): num
   for (let i = 0; i < path.length - (loop ? 0 : 1); i++) {
     const prev = path[i]
     const next = path[(i + 1) % path.length]
-    const a = [] as number[]
-    const b = [] as number[]
+    const a: number[] = [] 
+    const b: number[] = []
     for (let unit = 0; unit < prev.length; unit++) {
       const from = prev[unit]
       const to = next[unit]

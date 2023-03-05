@@ -62,51 +62,44 @@ export const easeInCirc: Easing = x =>
 export const easeOutCirc: Easing = x =>
   sqrt(1 - (x - 1) ** 2)
 
-export const easeInOutCirc: Easing = x => {
-  return x < 0.5
+export const easeInOutCirc: Easing = x =>
+  x < 0.5
     ? (1 - sqrt(1 - (2 * x) ** 2)) / 2
     : (sqrt(1 - (-2 * x + 2) ** 2) + 1) / 2
-}
 
-export const easeInBack: Easing = x => {
-  return C3 * x * x * x - C1 * x * x
-}
+export const easeInBack: Easing = x =>
+  C3 * x * x * x - C1 * x * x
 
-export const easeOutBack: Easing = x => {
-  return 1 + C3 * (x - 1) ** 3 + C1 * (x - 1) ** 2
-}
+export const easeOutBack: Easing = x =>
+  1 + C3 * (x - 1) ** 3 + C1 * (x - 1) ** 2
 
-export const easeInOutBack: Easing = x => {
-  return x < 0.5
+export const easeInOutBack: Easing = x =>
+  x < 0.5
     ? ((2 * x) ** 2 * ((C2 + 1) * 2 * x - C2)) / 2
     : ((2 * x - 2) ** 2 * ((C2 + 1) * (x * 2 - 2) + C2) + 2) / 2
-}
 
-export const easeInElastic: Easing = x => {
-  return x === 0
+export const easeInElastic: Easing = x =>
+  x === 0
     ? 0
     : x === 1
       ? 1
       : -(2 ** (10 * x - 10)) * sin((x * 10 - 10.75) * C4)
-}
 
-export const easeOutElastic: Easing = x => {
-  return x === 0
+export const easeOutElastic: Easing = x =>
+  x === 0
     ? 0
     : x === 1
       ? 1
       : 2 ** (-10 * x) * sin((x * 10 - 0.75) * C4) + 1
-}
 
-export const easeInOutElastic: Easing = x => {
-  return x === 0
+export const easeInOutElastic: Easing = x =>
+  x === 0
     ? 0
     : x === 1
       ? 1
       : x < 0.5
         ? -(2 ** (20 * x - 10) * sin((20 * x - 11.125) * C5)) / 2
         : (2 ** (-20 * x + 10) * sin((20 * x - 11.125) * C5)) / 2 + 1
-}
 
 export const easeOutBounce: Easing = x => {
   const n1 = 7.5625

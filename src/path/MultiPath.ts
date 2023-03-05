@@ -1,4 +1,4 @@
-import { type PathType } from "../types"
+import { type PathType } from "../types.js"
 
 export function MultiPath (...paths: PathType[]): PathType {
   const distance = paths.reduce((total, path) => total + path.distance, 0)
@@ -25,6 +25,7 @@ export function MultiPath (...paths: PathType[]): PathType {
   }
 
   getPath.distance = distance
+  getPath.wasNumberList = paths[0].wasNumberList
 
   return getPath
 }

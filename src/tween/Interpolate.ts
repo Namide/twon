@@ -1,6 +1,6 @@
 import { type InterpolateOptions, type Easing, type InterpolateType, type PathType, type TweenPathInput } from '../types.js'
 import { easeInOutSine } from '../easing/easing.js'
-import { RawToPath } from '../path/RawToPath.js'
+import { FromToPath } from '../path/FromToPath.js'
 
 export class Interpolate<ValueType extends number | number[]> implements InterpolateType<ValueType> {
   duration: number
@@ -12,7 +12,7 @@ export class Interpolate<ValueType extends number | number[]> implements Interpo
     this.duration = duration
     this.delay = delay
     this.ease = ease
-    this.path = RawToPath(rawPath)
+    this.path = Array.isArray(rawPath) ? FromToPath(rawPath as unknown as ([number, number] | [number[], number[]])) : rawPath 
   }
 
   getValue (time: number): ValueType {

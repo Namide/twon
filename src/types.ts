@@ -10,8 +10,8 @@ export interface InterpolateType<ValueType> {
 
 export type TweenEvent = 'play' | 'pause' | 'end' | 'start' | 'update'
 
-export type FromToRawPath = [number[], number[]]
-export type RawPath = number[][]
+export type FromToRawPath = [number[], number[]] | [number, number]
+export type RawPath = number[][] | number[]
 export type TweenPathInput<ValueType extends number | number[]> = [ValueType, ValueType] | ValueType[] | FromToRawPath | RawPath | PathType
 
 export interface InterpolateOptions {
@@ -63,5 +63,5 @@ export type TweenEmitCallback<ValueType> = EmitCallback<'update', ValueType> | E
 export type PathType = {
   (x: number): number[];
   distance: number;
-  wasNumberList?: true
+  wasNumberList: boolean
 }
