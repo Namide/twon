@@ -1,14 +1,14 @@
 {
-  "name": "tweenkle",
+  "name": "twon",
   "version": "0.0.1",
   "description": "Tween js/ts library with timeline and cubic bezier support",
   "type": "module",
-  "main": "./lib/tweenkle.umd.js",
-  "module": "./lib/tweenkle.es.js",
+  "main": "./lib/twon.umd.js",
+  "module": "./lib/twon.es.js",
   "exports": {
     ".": {
-      "import": "./lib/tweenkle.es.js",
-      "require": "./lib/tweenkle.umd.js"
+      "import": "./lib/twon.es.js",
+      "require": "./lib/twon.umd.js"
     }
   },
   "types": "lib/index.d.ts",

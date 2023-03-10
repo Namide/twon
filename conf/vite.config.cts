@@ -8,7 +8,7 @@ module.exports = defineConfig({
     lib: {
       entry: path.resolve(__dirname, '../src/index.ts'),
       name: 'NamideTween',
-      fileName: (format) => `tweenkle.${format}.js`,
+      fileName: (format) => `twon.${format}.js`,
     },
     minify: "terser",
     terserOptions: {
