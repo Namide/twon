@@ -1,6 +1,6 @@
 {
   "name": "twon",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Tween js/ts library with timeline and cubic bezier support",
   "type": "module",
   "main": "./lib/twon.umd.js",
