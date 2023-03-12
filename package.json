@@ -1,6 +1,6 @@
 {
   "name": "twon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Tween js/ts library with timeline and cubic bezier support",
   "type": "module",
   "main": "./lib/twon.umd.js",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Namide/tween.git"
+    "url": "git+https://github.com/Namide/twon.git"
   },
   "keywords": [
     "animation",
@@ -42,9 +42,9 @@
   "author": "damien@doussaud.fr",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/Namide/tween/issues"
+    "url": "https://github.com/Namide/twon/issues"
   },
-  "homepage": "https://github.com/Namide/tween#readme",
+  "homepage": "https://github.com/Namide/twon#readme",
   "devDependencies": {
     "@types/node": "^18.11.19",
     "@typescript-eslint/eslint-plugin": "^5.50.0",

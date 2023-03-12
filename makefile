@@ -22,3 +22,7 @@ build:
 		-u "node" \
 		node:slim \
 		npm run build
+
+make publish
+  npm adduser
+	npm publish --tag alpha
