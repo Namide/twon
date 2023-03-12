@@ -95,7 +95,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     return this
   }
 
-  change (to: ValueType, options: DynamicTweenOptions<ValueType> = {}): this {
+  to (to: ValueType, options: DynamicTweenOptions<ValueType> = {}): this {
     return this._addInterpolate(to, { ...options, delay: (options.delay ?? 0) + (this.timer?.time ?? 0) })
   }
 
