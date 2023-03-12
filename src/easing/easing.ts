@@ -21,21 +21,21 @@ export const easeInCubic: Easing = x => x ** 3
 export const easeOutCubic: Easing = x => 1 - (1 - x) ** 3
 
 export const easeInOutCubic: Easing = x =>
-  x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2
+  x < 0.5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2
 
 export const easeInQuart: Easing = x => x ** 4
 
 export const easeOutQuart: Easing = x => 1 - (1 - x) ** 4
 
 export const easeInOutQuart: Easing = x =>
-  x < 0.5 ? 8 * x * x * x * x : 1 - (-2 * x + 2) ** 4 / 2
+  x < 0.5 ? 8 * x ** 4 : 1 - (-2 * x + 2) ** 4 / 2
 
-export const easeInQuint: Easing = x => x * x * x * x * x
+export const easeInQuint: Easing = x => x ** 5
 
 export const easeOutQuint: Easing = x => 1 - (1 - x) ** 5
 
 export const easeInOutQuint: Easing = x =>
-  x < 0.5 ? 16 * x * x * x * x * x : 1 - (-2 * x + 2) ** 5 / 2
+  x < 0.5 ? 16 * x ** 4 * x : 1 - (-2 * x + 2) ** 5 / 2
 
 export const easeInSine: Easing = x => 1 - cos((x * PI) / 2)
 
@@ -68,7 +68,7 @@ export const easeInOutCirc: Easing = x =>
     : (sqrt(1 - (-2 * x + 2) ** 2) + 1) / 2
 
 export const easeInBack: Easing = x =>
-  C3 * x * x * x - C1 * x * x
+  C3 * x ** 3 - C1 * x * x
 
 export const easeOutBack: Easing = x =>
   1 + C3 * (x - 1) ** 3 + C1 * (x - 1) ** 2
