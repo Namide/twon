@@ -51,6 +51,27 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     }
   }
 
+  to (value: ValueType, options: TweenOptions<ValueType> = {}) {
+    const oldValue = this.interpolate.getValue(this._startTime + this.interpolate.duration + this.interpolate.delay)
+    return new Tween([
+      oldValue, value],
+      {
+        ...options,
+        delay: (options.delay ?? 0) + this.interpolate.delay + this.interpolate.duration
+      }
+    )
+  }
+
+  chain (rawPath: TweenPathInput<ValueType>, options: TweenOptions<ValueType> = {}) {
+    return new Tween(
+      rawPath,
+      {
+        ...options,
+        delay: (options.delay ?? 0) + this.interpolate.delay + this.interpolate.duration
+      }
+    )
+  }
+
   getValue (time: number): ValueType {
     return this.interpolate.getValue(time)
   }
