@@ -24,12 +24,12 @@ Tween js/ts library with timeline and cubic bezier support
 npm install twon
 ```
 
-## Usage
+## Examples
 
 ### Simple tween
 
 ```javascript
-import { Tween } from "twon"
+import { Tween, easeInOutCubic } from "twon"
 
 const tween = new Tween(
   [
@@ -40,6 +40,67 @@ const tween = new Tween(
     delay: 1000, // delay of 1 second before tween
     duration: 2000, // 2 seconds of animation
     ease: easeInOutCubic, // Cubic easing equation
+    onUpdate: console.log
+  }
+)
+```
+
+### Path
+
+```javascript
+import { Tween } from "twon"
+
+const tween = new Tween(
+  [ // 2D path with 4 positions
+    [0, 0],
+    [0.25, 0.25],
+    [0.25, 0.1],
+    [0.5, 0.4]
+  ],
+  {
+    delay: 1000, // delay of 1 second before tween
+    duration: 2000, // 2 seconds of animation
+    onUpdate: console.log
+  }
+)
+```
+
+### Smooth path
+
+```javascript
+import { Tween, SmoothPath } from "twon"
+
+const tween = new Tween(
+  SmoothPath(
+    [ // 2D smooth path with 4 positions
+      [0, 0],
+      [0.25, 0.25],
+      [0.25, 0.1],
+      [0.5, 0.4]
+    ],
+    { step: 3 }
+  ),
+  {
+    duration: 1000, // 1 seconds of animation
+    onUpdate: console.log
+  }
+)
+```
+
+### Cubic-Bezier
+
+```javascript
+import { Tween, cubicBezier } from "twon"
+
+const tween = new Tween(
+  [
+    5, // from value
+    10 // to value
+  ],
+  {
+    delay: 1000, // delay of 1 second before tween
+    duration: 2000, // 2 seconds of animation
+    ease: cubicBezier(0.435, 0.002, 0.075, 0.989), // Cubic bezier curve
     onUpdate: console.log
   }
 )
