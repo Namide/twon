@@ -1,7 +1,7 @@
 import { type EmitCallback } from '../types.js'
 
 export class Emit<Callback extends EmitCallback<string, any>> {
-  protected readonly list: Array<{ event: Callback['event'], callback: Callback['callback'] }> = []
+  protected list: Array<{ event: Callback['event'], callback: Callback['callback'] }> = []
 
   on (event: Callback['event'], callback?: Callback['callback']): this {
     if (callback != null) {
@@ -15,6 +15,11 @@ export class Emit<Callback extends EmitCallback<string, any>> {
     if (index > -1) {
       this.list.splice(index, 1)
     }
+    return this
+  }
+
+  dispose (): this {
+    this.list = []
     return this
   }
 

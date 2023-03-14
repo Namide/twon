@@ -19,6 +19,8 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   private _timer: TickerType | null = null
 
   private _startTime: number = 0 // Started time of the dynamic tween in the timer
+  private _play = this.emit.bind(this, 'play')
+  private _pause = this.emit.bind(this, 'pause')
   private readonly _options: DynamicTweenOptions<ValueType>
 
   private readonly _frozenList: Frozen[]
@@ -37,10 +39,6 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     this._isArray = Array.isArray(from)
 
     this._update = this._update.bind(this)
-
-    this.on('start', this._options.onStart)
-    this.on('update', this._options.onUpdate)
-    this.on('end', this._options.onEnd)
 
     this.timer = (options.timer === undefined) ? (globalTicker) : options.timer
 
@@ -113,26 +111,25 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     if (this._timer !== null) {
       oldTime = this._timer.time
       this._timer.off('update', this._update)
-      this._timer.off('play', this._options.onPlay)
-      this._timer.off('pause', this._options.onPause)
+      this._timer.off('play', this._play)
+      this._timer.off('pause', this._pause)
     }
 
     this._timer = timer
 
     if (this._timer !== null) {
       this._timer.on('update', this._update)
-      this._timer.on('play', this._options.onPlay)
-      this._timer.on('pause', this._options.onPause)
+      this._timer.on('play', this._play)
+      this._timer.on('pause', this._pause)
 
       this._startTime += (this.timer?.time ?? 0) - oldTime
     }
   }
 
-  dispose (): void {
-    this.off('start', this._options.onStart)
-    this.off('update', this._options.onUpdate)
-    this.off('end', this._options.onEnd)
+  dispose (): this {
+    super.dispose()
     this.timer = null
+    return this
   }
 
   private _autoDispose (currentTime: number): void {

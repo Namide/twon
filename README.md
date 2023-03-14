@@ -40,9 +40,8 @@ const tween = new Tween(
     delay: 1000, // delay of 1 second before tween
     duration: 2000, // 2 seconds of animation
     ease: easeInOutCubic, // Cubic easing equation
-    onUpdate: console.log
   }
-)
+).on('update', console.log)
 ```
 
 ### Path
@@ -60,9 +59,8 @@ const tween = new Tween(
   {
     delay: 1000, // delay of 1 second before tween
     duration: 2000, // 2 seconds of animation
-    onUpdate: console.log
   }
-)
+).on('update', console.log)
 ```
 
 ### Smooth path
@@ -82,9 +80,8 @@ const tween = new Tween(
   ),
   {
     duration: 1000, // 1 seconds of animation
-    onUpdate: console.log
   }
-)
+).on('update', console.log)
 ```
 
 ### Cubic-Bezier
@@ -101,9 +98,8 @@ const tween = new Tween(
     delay: 1000, // delay of 1 second before tween
     duration: 2000, // 2 seconds of animation
     ease: cubicBezier(0.435, 0.002, 0.075, 0.989), // Cubic bezier curve
-    onUpdate: console.log
   }
-)
+).on('update', console.log)
 ```
 
 ### Dynamic tween
@@ -113,8 +109,7 @@ import { DynamicTween } from "twon";
 
 const tween = new DynamicTween(
   [0, 0], // 2 dimention position
-  { onUpdate: console.log }
-)
+).on('update', console.log)
 
 // Change position after 500ms
 setTimeout(() =>
@@ -136,12 +131,12 @@ setTimeout(() =>
 - ☑️ Timeline
 - ☑️ Simple tween
 - ☑️ Dynamic tween
-- ☐ CI
-- ☐ Log errors
-- ☐ Unit tests
-- ☐ Code coverage
-- ☐ Documentation
-- ☐ Website
+- CI
+- Log errors
+- Unit tests
+- Code coverage
+- Documentation
+- Website
 
 ## License
 

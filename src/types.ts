@@ -22,12 +22,6 @@ export interface InterpolateOptions {
 
 export interface TweenOptions<ValueType> extends InterpolateOptions {
   timer?: TickerType | null
-
-  onStart?: () => void
-  onUpdate?: (value: ValueType) => void
-  onEnd?: (value: ValueType) => void
-  onPause?: () => void
-  onPlay?: () => void
 }
 
 export interface DynamicTweenOptions<ValueType> extends TweenOptions<ValueType>, InterpolateOptions {
