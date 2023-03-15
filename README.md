@@ -66,10 +66,10 @@ const tween = new Tween(
 ### Smooth path
 
 ```javascript
-import { Tween, SmoothPath } from "twon"
+import { Tween, ErodeSmoothPath } from "twon"
 
 const tween = new Tween(
-  SmoothPath(
+  ErodeSmoothPath(
     [ // 2D smooth path with 4 positions
       [0, 0],
       [0.25, 0.25],

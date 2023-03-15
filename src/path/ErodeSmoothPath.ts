@@ -1,6 +1,8 @@
 import { type PathType } from "../types.js"
 import { Path } from "./Path.js"
 
+const POWER = 0.275
+
 function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }: { step: number, keepStart: boolean, keepEnd: boolean, loop: boolean }): number[][] {
   if (step < 1) {
     return path
@@ -16,8 +18,8 @@ function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }: { st
     for (let unit = 0; unit < prev.length; unit++) {
       const from = prev[unit]
       const to = next[unit]
-      a.push((to - from) * 0.28 + from)
-      b.push((to - from) * 0.72 + from)
+      a.push((to - from) * POWER + from)
+      b.push((to - from) * (1 - POWER) + from)
     }
     newPath.push(a, b)
   }
@@ -29,6 +31,6 @@ function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }: { st
   return _smoothPath(newPath, { step: step - 1, keepStart, keepEnd, loop })
 }
 
-export function SmoothPath<ValueType extends number[]> (path: ValueType[], { step = 1, keepStart = true, keepEnd = true, loop = false } = {}): PathType {
+export function ErodeSmoothPath<ValueType extends number[]> (path: ValueType[], { step = 1, keepStart = true, keepEnd = true, loop = false } = {}): PathType {
   return Path(_smoothPath(path, { step, keepStart, keepEnd, loop }), { loop })
 }
