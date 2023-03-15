@@ -20,11 +20,11 @@ export interface InterpolateOptions {
   ease?: Easing
 }
 
-export interface TweenOptions<ValueType> extends InterpolateOptions {
+export interface TweenOptions extends InterpolateOptions {
   timer?: TickerType | null
 }
 
-export interface DynamicTweenOptions<ValueType> extends TweenOptions<ValueType>, InterpolateOptions {
+export interface DynamicTweenOptions extends TweenOptions, InterpolateOptions {
   msPerUnit?: number
 }
 

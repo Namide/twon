@@ -1,5 +1,5 @@
-import { type PathType } from "../types"
-import { ErodeSmoothPath } from "./ErodeSmoothPath"
+import { type PathType } from "../types.js"
+import { ErodeSmoothPath } from "./ErodeSmoothPath.js"
 
 const POWER = 0.275
 

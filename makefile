@@ -23,6 +23,10 @@ build:
 		node:slim \
 		npm run build
 
-make publish
-  npm adduser
-	npm publish --tag alpha
+publish:
+	docker run -ti --rm \
+		-v $(shell pwd):/usr/src/app \
+		-w /usr/src/app \
+		-u "node" \
+		node:slim \
+		npm adduser; npm publish

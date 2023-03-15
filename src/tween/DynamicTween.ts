@@ -21,20 +21,20 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   private _startTime: number = 0 // Started time of the dynamic tween in the timer
   private _play = this.emit.bind(this, 'play')
   private _pause = this.emit.bind(this, 'pause')
-  private readonly _options: DynamicTweenOptions<ValueType>
+  private readonly _options: DynamicTweenOptions
 
   private readonly _frozenList: Frozen[]
   private readonly _isArray: boolean
 
   private readonly interpolates: Interpolate<number[]>[] = []
 
-  constructor (from: ValueType, options: DynamicTweenOptions<ValueType> = {}) {
+  constructor (from: ValueType, options: DynamicTweenOptions = {}) {
     super()
 
     this._options = {
       ...options,
       // msPerUnit: options.msPerUnit ?? 20
-    } as DynamicTweenOptions<ValueType>
+    } as DynamicTweenOptions
 
     this._isArray = Array.isArray(from)
 
@@ -72,7 +72,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     return this._frozenList[this._frozenList.length - 1]
   }
 
-  private _addInterpolate (to: ValueType, options: DynamicTweenOptions<ValueType>): this {
+  private _addInterpolate (to: ValueType, options: DynamicTweenOptions): this {
     const cleanTo = (this._isArray ? to : [to]) as number[]
     const oldEndValue = this._getEndFrozen().value
     const deltaValue = cleanTo.map((val, index) => val - oldEndValue[index])
@@ -93,11 +93,11 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
     return this
   }
 
-  to (to: ValueType, options: DynamicTweenOptions<ValueType> = {}): this {
+  to (to: ValueType, options: DynamicTweenOptions = {}): this {
     return this._addInterpolate(to, { ...options, delay: (options.delay ?? 0) + (this.timer?.time ?? 0) })
   }
 
-  chain (to: ValueType, options: DynamicTweenOptions<ValueType> = {}): this {
+  chain (to: ValueType, options: DynamicTweenOptions = {}): this {
     const oldEnd = this._getEndFrozen()
     return this._addInterpolate(to, { ...options, delay: (options.delay ?? 0) + oldEnd.time })
   }

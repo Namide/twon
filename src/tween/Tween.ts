@@ -12,12 +12,12 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
   private _startTime: number = 0
   private _play = this.emit.bind(this, 'play')
   private _pause = this.emit.bind(this, 'pause')
-  private readonly _options: TweenOptions<ValueType>
+  // private readonly _options: TweenOptions
 
-  constructor (rawPath: TweenPathInput<ValueType>, options: TweenOptions<ValueType> = {}) {
+  constructor (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
     super()
 
-    this._options = { ...options }
+    // this._options = { ...options }
 
     this._update = this._update.bind(this)
 
@@ -49,7 +49,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     }
   }
 
-  to (value: ValueType, options: TweenOptions<ValueType> = {}) {
+  to (value: ValueType, options: TweenOptions = {}) {
     const oldValue = this.interpolate.getValue(this._startTime + this.interpolate.duration + this.interpolate.delay)
     return new Tween([
       oldValue, value],
@@ -60,7 +60,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     )
   }
 
-  chain (rawPath: TweenPathInput<ValueType>, options: TweenOptions<ValueType> = {}) {
+  chain (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
     return new Tween(
       rawPath,
       {
