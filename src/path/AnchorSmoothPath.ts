@@ -16,6 +16,10 @@ function _getDistances(p1: number[], p0: number[] = []) {
 
 export function AnchorSmoothPath (path: number[][], { step = 1, keepStart = true, keepEnd = true, loop = false } = {}): PathType {
   
+  if (step < 1) {
+    return ErodeSmoothPath(path, { step, keepStart, keepEnd, loop })
+  }
+
   const newPath: number[][] = !loop ? [path[0]] : []
 
   for (let i = (loop ? 0 : 1); i < path.length - (loop ? 0 : 1); i++) {
