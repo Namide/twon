@@ -89,6 +89,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
 
     this.interpolates.push(interpolate)
     this._addFrozen(interpolate.delay + interpolate.duration, deltaValue)
+    this.isEnded = false
 
     return this
   }
@@ -169,12 +170,25 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
 
   private _update (time: number): void {
     const values = this._getValues(time)
+    const value = (this._isArray ? values : values[0]) as ValueType
 
-    if (!this.isStarted && time > this._startTime) {
-      this.isStarted = true
-      this.emit('start', (this._isArray ? values : values[0]) as ValueType)
+    // After
+    if (time > this._getEndFrozen().time) {
+      if (!this.isEnded) {
+        this.emit('update', value)
+        this.emit('end', value)
+        this.isEnded = true
+      }
+      return
     }
 
-    this.emit('update', (this._isArray ? values : values[0]) as ValueType)
+    // Start
+    if (!this.isStarted && time > this._startTime) {
+      this.isStarted = true
+      this.emit('start', value)
+    }
+
+    // During
+    this.emit('update', value)
   }
 }

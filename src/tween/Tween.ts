@@ -85,11 +85,12 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     if (time < this._startTime + this.interpolate.delay) {
       return
     }
+    
+    const value = this.getValue(time - this._startTime)
 
     // After
     if (time > this._startTime + this.interpolate.delay + this.interpolate.duration) {
       if (!this.isEnded) {
-        const value = this.getValue(time - this._startTime)
         this.emit('update', value)
         this.emit('end', value)
         this.isEnded = true
@@ -100,12 +101,14 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
       return
     }
 
-    // During
-    const value = this.getValue(time - this._startTime)
-    if (!this.isStarted) { // Start
+
+    // Start
+    if (!this.isStarted) {
       this.isStarted = true
       this.emit('start', value)
     }
+
+    // During
     this.emit('update', value)
   }
 }
