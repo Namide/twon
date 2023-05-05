@@ -32,7 +32,8 @@ export interface TweenType<ValueType> {
   isStarted: boolean
   timer: TickerType | null
 
-  getValue: (time: number) => ValueType
+  getValue: (time?: number) => ValueType
+  getTime: () => number
   dispose: () => void
 }
 

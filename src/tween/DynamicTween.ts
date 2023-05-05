@@ -163,7 +163,15 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
       }, frozen)
   }
 
-  getValue (time: number): ValueType {
+  getTime (): number {
+    if (!this.timer) {
+      console.warn('getTime() need timer to work otherwise it return 0')
+      return 0
+    }
+    return this.timer.time - this._startTime
+  }
+
+  getValue (time: number = this.getTime()): ValueType {
     const values = this._getValues(time)
     return (this._isArray ? values : values[0]) as ValueType
   }

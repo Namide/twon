@@ -41,7 +41,12 @@ const tween = new Tween(
     duration: 2000, // 2 seconds of animation
     ease: easeInOutCubic, // Cubic easing equation
   }
-).on('update', console.log)
+).on('update', console.log) // log on each frame
+
+// or log once after 1.5 sec
+setTimeout(() => {
+  console.log(tween.getValue())
+}, 1500)
 ```
 
 ### Path

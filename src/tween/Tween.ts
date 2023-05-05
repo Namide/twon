@@ -70,7 +70,15 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
     )
   }
 
-  getValue (time: number): ValueType {
+  getTime (): number {
+    if (!this.timer) {
+      console.warn('getTime() need timer to work otherwise it return 0')
+      return 0
+    }
+    return this.timer.time - this._startTime
+  }
+
+  getValue (time: number = this.getTime()): ValueType {
     return this.interpolate.getValue(time)
   }
 
