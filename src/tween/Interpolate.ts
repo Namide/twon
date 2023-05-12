@@ -16,7 +16,8 @@ export class Interpolate<ValueType extends number | number[]> implements Interpo
   }
 
   getValue (time: number): ValueType {
-    const progress = this.ease((time - this.delay) / this.duration)
+    const t = (time - this.delay) / this.duration
+    const progress = t > 0 ? (t < 1 ? this.ease(t) : 1) : 0
     return (this.path.wasNumberList === true ? this.path(progress)[0] : this.path(progress)) as ValueType
   }
 }
