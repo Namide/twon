@@ -49,26 +49,26 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
     }
   }
 
-  to (value: ValueType, options: TweenOptions = {}) {
-    const oldValue = this.interpolate.getValueByProgress(1)
-    return new SimpleTween([
-      oldValue, value],
-      {
-        ...options,
-        delay: (options.delay ?? 0) + this.interpolate.delay + this.interpolate.duration
-      }
-    )
-  }
+  // to (value: ValueType, options: TweenOptions = {}) {
+  //   const oldValue = this.interpolate.getValueByProgress(1)
+  //   return new SimpleTween([
+  //     oldValue, value],
+  //     {
+  //       ...options,
+  //       delay: (options.delay ?? 0) + this.interpolate.delay + this.interpolate.duration
+  //     }
+  //   )
+  // }
 
-  chain (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
-    return new SimpleTween(
-      rawPath,
-      {
-        ...options,
-        delay: (options.delay ?? 0) + this.interpolate.delay + this.interpolate.duration
-      }
-    )
-  }
+  // chain (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
+  //   return new SimpleTween(
+  //     rawPath,
+  //     {
+  //       ...options,
+  //       delay: (options.delay ?? 0) + this.interpolate.delay + this.interpolate.duration
+  //     }
+  //   )
+  // }
 
   getTime (): number {
     if (!this.timer) {
