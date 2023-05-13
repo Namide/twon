@@ -29,9 +29,9 @@ npm install twon
 ### Simple tween
 
 ```javascript
-import { Tween, easeInOutCubic } from "twon"
+import { SimpleTween, easeInOutCubic } from "twon"
 
-const tween = new Tween(
+const tween = new SimpleTween(
   [
     5, // from value
     10 // to value
@@ -52,9 +52,9 @@ setTimeout(() => {
 ### Path
 
 ```javascript
-import { Tween } from "twon"
+import { SimpleTween } from "twon"
 
-const tween = new Tween(
+const tween = new SimpleTween(
   [ // 2D path with 4 positions
     [0, 0],
     [0.25, 0.25],
@@ -71,9 +71,9 @@ const tween = new Tween(
 ### Smooth path
 
 ```javascript
-import { Tween, ErodeSmoothPath } from "twon"
+import { SimpleTween, ErodeSmoothPath } from "twon"
 
-const tween = new Tween(
+const tween = new SimpleTween(
   ErodeSmoothPath(
     [ // 2D smooth path with 4 positions
       [0, 0],
@@ -92,9 +92,9 @@ const tween = new Tween(
 ### Cubic-Bezier
 
 ```javascript
-import { Tween, cubicBezier } from "twon"
+import { SimpleTween, cubicBezier } from "twon"
 
-const tween = new Tween(
+const tween = new SimpleTween(
   [
     5, // from value
     10 // to value

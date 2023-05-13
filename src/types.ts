@@ -6,6 +6,7 @@ export interface InterpolateType<ValueType> {
   ease: Easing;
   path: PathType
   getValue: (time: number) => ValueType
+  getValueByProgress: (progress: number) => ValueType
 }
 
 export type TweenEvent = 'play' | 'pause' | 'end' | 'start' | 'update'

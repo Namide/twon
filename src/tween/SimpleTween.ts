@@ -3,7 +3,7 @@ import { Interpolate } from './Interpolate.js'
 import { globalTicker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
 
-export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
+export class SimpleTween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
   isStarted = false
   isEnded = false
   interpolate: InterpolateType<ValueType>
@@ -50,8 +50,8 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
   }
 
   to (value: ValueType, options: TweenOptions = {}) {
-    const oldValue = this.interpolate.getValue(this._startTime + this.interpolate.duration + this.interpolate.delay)
-    return new Tween([
+    const oldValue = this.interpolate.getValueByProgress(1)
+    return new SimpleTween([
       oldValue, value],
       {
         ...options,
@@ -61,7 +61,7 @@ export class Tween<ValueType extends (number | number[])> extends Emit<TweenEmit
   }
 
   chain (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
-    return new Tween(
+    return new SimpleTween(
       rawPath,
       {
         ...options,
