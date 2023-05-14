@@ -1,7 +1,7 @@
 import { type TickerType, type TweenOptions, type TweenEmitCallback } from '../types.js'
 import { Emit } from '../core/Emit.js'
-import { TimelineTween } from './TimelineTween'
-import { DynamicTween } from './DynamicTween'
+import { TimelineTween } from './TimelineTween.js'
+import { DynamicTween } from './DynamicTween.js'
 
 type ValueOf<T> = T[keyof T];
 type Obj = { [key: string]: number }
