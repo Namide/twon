@@ -26,6 +26,32 @@ npm install twon
 
 ## Examples
 
+### Auto tween
+
+```javascript
+import { Tween } from "twon"
+
+const progress = { x: 0 }
+
+const tween = new Tween(
+    progress,         // Object reference (can be array of number)
+    { x: 100 }        // to value
+    {
+      delay: 1000,    // delay of 1 second before tween
+      duration: 2000, // 2 seconds of animation
+    }
+  )
+  .to(                // Chain a tween after
+    { x: 50 },
+    { duration: 1000 }
+  )  
+
+// Check the value after 1.5 sec
+setTimeout(() => {
+  console.log(progress.x)
+}, 1500)
+```
+
 ### Simple tween
 
 ```javascript
