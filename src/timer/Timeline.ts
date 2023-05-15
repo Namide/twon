@@ -1,7 +1,5 @@
-import { type EmitCallback, type TickerEvent, type TickerType, type TimelineOptions } from '../types.js'
+import { type TimelineOptions } from '../types.js'
 import { Ticker } from './Ticker.js'
-
-type EmitCb = EmitCallback<'update', number> | EmitCallback<TickerEvent, void>
 
 export class Timeline extends Ticker {
   autoDispose = false
