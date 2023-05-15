@@ -1,6 +1,6 @@
 import { type TickerType, type TweenType, type DynamicTweenOptions, type TweenEmitCallback } from '../types.js'
 import { Interpolate } from './Interpolate.js'
-import { globalTicker } from '../timer/Ticker.js'
+import { Ticker } from '../timer/Ticker.js'
 import { Emit } from '../core/Emit.js'
 
 function distance (from: number[], to: number[]): number {
@@ -40,7 +40,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
 
     this._update = this._update.bind(this)
 
-    this.timer = (options.timer === undefined) ? (globalTicker) : options.timer
+    this.timer = (options.timer === undefined) ? new Ticker() : options.timer
 
     // Init frozen list
     this._frozenList = [{ time: this.timer?.time ?? 0, value: this._isArray ? [...(from as number[])] : [from as number] }]

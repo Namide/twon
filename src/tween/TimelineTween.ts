@@ -1,7 +1,7 @@
 import { type TweenType, type TickerType, type TweenOptions, type TweenEmitCallback, type TweenPathInput } from '../types.js'
 import { Emit } from '../core/Emit.js'
 import { SimpleTween } from './SimpleTween.js'
-import { globalTicker } from '../timer/Ticker.js'
+import { Ticker } from '../timer/Ticker.js'
 
 export class TimelineTween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
 
@@ -16,7 +16,7 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
   constructor (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
     super()
 
-    const timer = (options.timer === undefined) ? globalTicker : options.timer
+    const timer = (options.timer === undefined) ? new Ticker() : options.timer
 
     const firstTween = new SimpleTween(rawPath, { ...options, timer })
     this._tweens.push(firstTween)

@@ -60,5 +60,3 @@ export class Ticker extends Emit<EmitCb> implements TickerType {
     return this
   }
 }
-
-export const globalTicker = new Ticker()
