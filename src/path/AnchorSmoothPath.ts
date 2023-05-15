@@ -1,4 +1,4 @@
-import { type PathType } from "../types.js"
+import { type PathType, type SmoothPathOptions } from "../types.js"
 import { ErodeSmoothPath } from "./ErodeSmoothPath.js"
 
 const POWER = 0.275
@@ -14,7 +14,7 @@ function _getDistances(p1: number[], p0: number[] = []) {
     return distance
 }
 
-export function AnchorSmoothPath (path: number[][], { step = 1, keepStart = true, keepEnd = true, loop = false } = {}): PathType {
+export function AnchorSmoothPath (path: number[][], { step = 3, keepStart = true, keepEnd = true, loop = false }: SmoothPathOptions = {}): PathType {
   
   if (step < 1) {
     return ErodeSmoothPath(path, { step, keepStart, keepEnd, loop })

@@ -4,12 +4,12 @@ import { type EmitCallback, type TickerEvent, type TickerType } from '../types.j
 type EmitCb = EmitCallback<'update', number> | EmitCallback<TickerEvent, void>
 
 export class Ticker extends Emit<EmitCb> implements TickerType {
-  private _id: number = -1
-  private _last: number
+  protected _id: number = -1
+  protected _last: number
 
   time: number
 
-  private _isEnabled = false
+  protected _isEnabled = false
   autoDispose = true
 
   constructor () {

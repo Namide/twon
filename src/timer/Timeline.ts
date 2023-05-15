@@ -1,14 +1,9 @@
-import { Emit } from '../core/Emit.js'
-import { type EmitCallback, type TickerEvent, type TickerType } from '../types.js'
+import { type EmitCallback, type TickerEvent, type TickerType, type TimelineOptions } from '../types.js'
+import { Ticker } from './Ticker.js'
 
 type EmitCb = EmitCallback<'update', number> | EmitCallback<TickerEvent, void>
 
-export class Timeline extends Emit<EmitCb> implements TickerType {
-  private _id: number = -1
-  private _last: number
-
-  time: number
-
+export class Timeline extends Ticker {
   autoDispose = false
 
   isPlaying: boolean
@@ -17,7 +12,7 @@ export class Timeline extends Emit<EmitCb> implements TickerType {
   speed: number
   duration: number
 
-  constructor ({ loop = false, play = true, speed = 1, duration = 0, autoReverse = false } = {}) {
+  constructor ({ loop = false, play = true, speed = 1, duration = 0, autoReverse = false }: TimelineOptions = {}) {
     super()
 
     this.isLooping = loop
@@ -25,9 +20,6 @@ export class Timeline extends Emit<EmitCb> implements TickerType {
     this.speed = speed
     this.duration = duration
     this.autoReverse = autoReverse
-
-    this._last = Date.now()
-    this.time = 0
   }
 
   setDuration (duration: number): this {
@@ -72,7 +64,7 @@ export class Timeline extends Emit<EmitCb> implements TickerType {
   }
 
   tick (): this {
-    if (this.isPlaying) {
+    if (this._isEnabled && this.isPlaying) {
       const now = Date.now()
       this.time += (now - this._last) * this.speed
 

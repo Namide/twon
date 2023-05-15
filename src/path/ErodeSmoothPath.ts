@@ -1,4 +1,4 @@
-import { type PathType } from "../types.js"
+import { type PathType, type SmoothPathOptions } from "../types.js"
 import { Path } from "./Path.js"
 
 const POWER = 0.275
@@ -31,6 +31,6 @@ function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }: { st
   return _smoothPath(newPath, { step: step - 1, keepStart, keepEnd, loop })
 }
 
-export function ErodeSmoothPath<ValueType extends number[]> (path: ValueType[], { step = 1, keepStart = true, keepEnd = true, loop = false } = {}): PathType {
+export function ErodeSmoothPath<ValueType extends number[]> (path: ValueType[], { step = 3, keepStart = true, keepEnd = true, loop = false }: SmoothPathOptions = {}): PathType {
   return Path(_smoothPath(path, { step, keepStart, keepEnd, loop }), { loop })
 }

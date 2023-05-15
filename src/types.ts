@@ -38,6 +38,8 @@ export interface TweenType<ValueType> {
   dispose: () => void
 }
 
+export type SmoothPathOptions = { step?: number, keepStart?: boolean, keepEnd?: boolean, loop?: boolean }
+
 export type TickerEvent = 'play' | 'pause' | 'disable' | 'enable' | 'update' | 'start' | 'end'
 
 export interface EmitType<Event extends string> {
@@ -51,6 +53,8 @@ export interface TickerType extends EmitType<TickerEvent> {
   tick: () => any
   setDuration?: (time: number) => any
 }
+
+export type TimelineOptions = { loop? : boolean, play? : boolean, speed? : number, duration? : number, autoReverse?: boolean }
 
 export interface EmitCallback<Event extends string, Arg> { event: Event, callback: (arg: Arg) => void }
 

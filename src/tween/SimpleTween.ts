@@ -46,6 +46,10 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
       this._timer.on('pause', this._pause)
 
       this._startTime += (this.timer?.time ?? 0) - oldTime
+      
+      if (this._timer.setDuration) {
+        this._timer.setDuration(this.interpolate.delay + this.interpolate.duration)
+      }
     }
   }
 

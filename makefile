@@ -29,4 +29,4 @@ publish:
 		-w /usr/src/app \
 		-u "node" \
 		node:slim \
-		npm adduser; npm publish
+		sh -c "npm adduser; npm publish"
