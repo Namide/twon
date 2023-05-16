@@ -14,7 +14,7 @@ function _getDistances(p1: number[], p0: number[] = []) {
     return distance
 }
 
-export function AnchorSmoothPath (path: number[][], { step = 3, keepStart = true, keepEnd = true, loop = false }: SmoothPathOptions = {}): PathType {
+export function CheckpointSmoothPath (path: number[][], { step = 3, keepStart = true, keepEnd = true, loop = false }: SmoothPathOptions = {}): PathType {
   
   if (step < 1) {
     return ErodeSmoothPath(path, { step, keepStart, keepEnd, loop })

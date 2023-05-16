@@ -2,14 +2,14 @@ import { type TickerType, type TweenOptions, type TweenEmitCallback, type Smooth
 import { Emit } from '../core/Emit.js'
 import { TimelineTween } from './TimelineTween.js'
 import { DynamicTween } from './DynamicTween.js'
-import { AnchorSmoothPath } from '../path/AnchorSmoothPath.js';
+import { CheckpointSmoothPath } from '../path/CheckpointSmoothPath.js';
 import { ErodeSmoothPath } from '../path/ErodeSmoothPath.js';
 import { Timeline } from "../timer/Timeline.js";
 import { cubicBezier } from '../easing/cubicBezier.js';
 
 type ValueOf<T> = T[keyof T];
 type Obj = { [key: string]: number }
-type AutoTweenOptions = TweenOptions & { path?: SmoothPathOptions & { anchor?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { cubicBezier?: [number, number, number, number] }
+type AutoTweenOptions = TweenOptions & { path?: SmoothPathOptions & { checkpoint?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { cubicBezier?: [number, number, number, number] }
 const enum ValueEnum { 
   Object,
   Array,
@@ -134,8 +134,8 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
     }
     
     // Is path
-    if (options?.anchor) {
-      return AnchorSmoothPath((ref as ValueType[]).map(this._valueToArray.bind(this)), options)
+    if (options?.checkpoint) {
+      return CheckpointSmoothPath((ref as ValueType[]).map(this._valueToArray.bind(this)), options)
     } else {
       return ErodeSmoothPath((ref as ValueType[]).map(this._valueToArray.bind(this)), options)
     }
