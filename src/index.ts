@@ -1,6 +1,7 @@
 export * from './types.js'
 export * from './easing/cubicBezier.js'
 export * from './easing/easing.js'
+export * from './easing/multiEasing.js'
 export * from './timer/Ticker.js'
 export * from './timer/Timeline.js'
 export * from './tween/DynamicTween.js'

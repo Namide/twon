@@ -1,4 +1,4 @@
-import { type TickerType, type TweenOptions, type TweenEmitCallback, type SmoothPathOptions, type PathType, type TimelineOptions } from '../types.js'
+import { type TickerType, type TweenOptions, type TweenEmitCallback, type SmoothPathOptions, type PathType, type TimelineOptions, type Easing } from '../types.js'
 import { Emit } from '../core/Emit.js'
 import { TimelineTween } from './TimelineTween.js'
 import { DynamicTween } from './DynamicTween.js'
@@ -6,10 +6,12 @@ import { CheckpointSmoothPath } from '../path/CheckpointSmoothPath.js';
 import { ErodeSmoothPath } from '../path/ErodeSmoothPath.js';
 import { Timeline } from "../timer/Timeline.js";
 import { cubicBezier } from '../easing/cubicBezier.js';
+import { multiEasing } from '../easing/multiEasing.js';
 
 type ValueOf<T> = T[keyof T];
 type Obj = { [key: string]: number }
-type AutoTweenOptions = TweenOptions & { path?: SmoothPathOptions & { checkpoint?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { cubicBezier?: [number, number, number, number] }
+type AutoTweenOptions = Omit<TweenOptions, "ease"> & { path?: SmoothPathOptions & { checkpoint?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { ease?: [number, number, number, number] | Easing | Parameters<typeof multiEasing> }
+type CleanAutoTweenOptions = Omit<AutoTweenOptions, "ease"> & { ease: Easing }
 const enum ValueEnum { 
   Object,
   Array,
@@ -81,8 +83,19 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
       options.timer = new Timeline(options.timeline)
     }
 
-    if (Array.isArray(options.cubicBezier)) {
-      options.ease = cubicBezier(...options.cubicBezier)
+    if (Array.isArray(options.ease)) {
+      if (isNaN(options.ease[0] as number)) {
+        console.log(options.ease)
+        options.ease = multiEasing(...(options.ease as Parameters<typeof multiEasing>)
+          .map(data => ({
+            weight: data.weight,
+            ease: Array.isArray(data.ease) ?
+              cubicBezier(...(data.ease as unknown as [number, number, number, number])) :
+              data.ease
+          })))
+      } else {
+        options.ease = cubicBezier(...(options.ease as [number, number, number, number]))
+      }
     }
 
     if (options.isDynamic && (this._valueType === ValueEnum.ArrayPath || this._valueType === ValueEnum.ObjectPath)) {
@@ -94,7 +107,7 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
         this._keys.map((key) => 
           reference[key as (keyof ValueType)] as number
         ),
-        options
+        options as CleanAutoTweenOptions
       )
 
       this._tween.to(this._refToArray(to, options.path) as number[])
@@ -104,13 +117,13 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
           this._valueToArray(reference) as number[],
           this._refToArray(to, options.path) as number[],
         ],
-        options
+        options as CleanAutoTweenOptions
       )
     } else {
 
       this._tween = new TimelineTween(
         this._refToArray([reference, ...(to as ValueType[])], options.path) as PathType,
-        options
+        options as CleanAutoTweenOptions
       )
     }
 
@@ -158,7 +171,7 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
   }
 
   to (value: ValueType, options: AutoTweenOptions = {}) {
-    this._tween.to(this._valueToArray(value), options)
+    this._tween.to(this._valueToArray(value), options as CleanAutoTweenOptions)
     return this
   }
 
