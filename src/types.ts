@@ -1,6 +1,6 @@
 export type Easing = (progress: number) => number
 
-export type MultiEasing = (...list: { ease: Easing, weight?: number }[]) => Easing 
+export type MultiEasing = (...list: (Easing | { ease: Easing, time?: number, value?: number })[]) => Easing 
 
 export interface InterpolateType<ValueType> {
   duration: number;

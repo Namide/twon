@@ -10,7 +10,8 @@ import { multiEasing } from '../easing/multiEasing.js';
 
 type ValueOf<T> = T[keyof T];
 type Obj = { [key: string]: number }
-type AutoTweenOptions = Omit<TweenOptions, "ease"> & { path?: SmoothPathOptions & { checkpoint?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { ease?: [number, number, number, number] | Easing | Parameters<typeof multiEasing> }
+type SimpleEase = [number, number, number, number] | Easing | Parameters<typeof multiEasing>
+type AutoTweenOptions = Omit<TweenOptions, "ease"> & { path?: SmoothPathOptions & { checkpoint?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { ease?: SimpleEase }
 type CleanAutoTweenOptions = Omit<AutoTweenOptions, "ease"> & { ease: Easing }
 const enum ValueEnum { 
   Object,
@@ -38,6 +39,28 @@ function getValueEnum<ValueType extends (Obj | number[])>(value: ValueType[] | V
 
   // Path of object type
   return ValueEnum.ObjectPath
+}
+
+const formatEase = (ease: SimpleEase) => {
+  if (Array.isArray(ease)) {
+    if (!isNaN(ease[0] as number)) {
+      return cubicBezier(...(ease as [number, number, number, number]))
+    }
+
+    return multiEasing(...(ease as Parameters<typeof multiEasing>)
+      .map((data): Easing | Parameters<typeof multiEasing>[0] => {
+        if (data instanceof Function) {
+          return formatEase(data)
+        }
+        return {
+          time: data.time,
+          value: data.value,
+          ease: formatEase(data.ease)
+        }
+      }))
+  }
+
+  return ease
 }
 
 export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCallback<ValueType>> {
@@ -83,19 +106,8 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
       options.timer = new Timeline(options.timeline)
     }
 
-    if (Array.isArray(options.ease)) {
-      if (isNaN(options.ease[0] as number)) {
-        console.log(options.ease)
-        options.ease = multiEasing(...(options.ease as Parameters<typeof multiEasing>)
-          .map(data => ({
-            weight: data.weight,
-            ease: Array.isArray(data.ease) ?
-              cubicBezier(...(data.ease as unknown as [number, number, number, number])) :
-              data.ease
-          })))
-      } else {
-        options.ease = cubicBezier(...(options.ease as [number, number, number, number]))
-      }
+    if (options.ease) {
+      options.ease = formatEase(options.ease)
     }
 
     if (options.isDynamic && (this._valueType === ValueEnum.ArrayPath || this._valueType === ValueEnum.ObjectPath)) {

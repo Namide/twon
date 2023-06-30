@@ -162,6 +162,7 @@ setTimeout(() =>
 - ☑️ Timeline
 - ☑️ Simple tween
 - ☑️ Dynamic tween
+- ☑️ Multi easing
 - CI
 - Log errors
 - Unit tests
