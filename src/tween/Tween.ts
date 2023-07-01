@@ -14,8 +14,8 @@ type SimpleEase = [number, number, number, number] | Easing | Parameters<typeof 
 type AutoTweenOptions = Omit<TweenOptions, "ease"> & { path?: SmoothPathOptions & { checkpoint?: boolean } } & { isDynamic?: boolean } & { timeline?: TimelineOptions } & { ease?: SimpleEase }
 type CleanAutoTweenOptions = Omit<AutoTweenOptions, "ease"> & { ease: Easing }
 const enum ValueEnum { 
-  Object,
-  Array,
+  ObjectNumber,
+  ArrayNumber,
   ArrayPath,
   ObjectPath
 }
@@ -23,26 +23,117 @@ const enum ValueEnum {
 /**
  * Get value enum type
  */
-function getValueEnum<ValueType extends (Obj | number[])>(value: ValueType[] | ValueType) {
-  // Object type
-  if (!Array.isArray(value)) {
-    return ValueEnum.Object
+function getValueEnum<ValueType extends (Obj | number[])>(reference: ValueType, value: ValueType[] | ValueType) {
 
-  // Array type
-  } else if (typeof value[0] === 'number') {
-    return ValueEnum.Array
+  // Base value is Array
+  if (Array.isArray(reference)) {
 
-  // Path of array type
-  } else if (Array.isArray(value[0])) {
+    if (__DEV__ && !Array.isArray(value)) {
+      console.warn(`"to" need to be Array because "reference" is an Array ; your "reference" is ${ typeof reference }: (${ JSON.stringify(reference) }) and "to" is ${ typeof value }: ${ JSON.stringify(value) }`)
+    }
+
+    // Array of Number type
+    if (!isNaN((value as number[])[0])) {
+      return ValueEnum.ArrayNumber
+    }
+
+    if (__DEV__ && !Array.isArray((value as number[])[0])) {
+      console.warn(`If your "reference" is an Array, your "to" need to be an Array of Number or an Array of Array of Number (to crate a path), you can not have Array of other type: ${ typeof (value as number[])[0] } for your "to" ${ JSON.stringify(value) }`)
+    }
+    
+    // Array of Path type
     return ValueEnum.ArrayPath
+
+    // // Array of number type
+    // if (!isNaN(value[0])) {
+    //   return ValueEnum.ArrayNumber
   }
 
-  // Path of object type
-  return ValueEnum.ObjectPath
+  // Base value is Object
+  if (__DEV__ && !(reference instanceof Object)) {
+    console.warn(`reference need to be Array of number or Object of numbers ; your reference is ${ typeof reference }: (${ JSON.stringify(reference) })`)
+  }
+
+  // If Array of Object
+  if (Array.isArray(value)) {
+
+    if (__DEV__) {
+      if (!(value[0] instanceof Object)) {
+        console.warn(`If your "reference" is an Object, your "to" need to be an Object of Number or an Array of Object of Number (to create a path), you can not have other type: ${ typeof value[0] } for your "to" ${ JSON.stringify(value) }`)
+      }
+
+      const objValues = Object.values(value[0])
+      if (isNaN(objValues[0])) {
+        console.warn(`If your "reference" is an Object, your "to" need to be an Object of Number or an Array of Object of Number (to create a path), you can not have other type: ${ typeof objValues[0] } for your "to" ${ JSON.stringify(value) }`)
+      }
+    }
+
+    return ValueEnum.ObjectPath
+  }
+
+  if (__DEV__) {
+    const objValues = Object.values(value)
+    if (isNaN(objValues[0])) {
+      console.warn(`If your "reference" is an Object, your "to" need to be an Object of Number or an Array of Object of Number (to create a path), you can not have other type: ${ typeof objValues[0] } for your "to" ${ JSON.stringify(value) }`)
+    }
+  }
+
+  return ValueEnum.ObjectNumber
+
+
+
+  // if (Array.isArray(value)) {
+
+  //   // Array of number type
+  //   if (!isNaN(value[0])) {
+  //     return ValueEnum.ArrayNumber
+  
+  //   // Array of path type
+  //   } else if (Array.isArray(value[0])) {
+
+  //     if (__DEV__ && typeof !isNaN(value[0][0])) {
+  //       console.warn(`to argument need to be Number, Array of Number, Object or Array of Object, you can not have Array of other type like ${ typeof value[0][0] } to your object (${ JSON.stringify(value) })`)
+  //     }
+      
+  //     return ValueEnum.ArrayPath
+
+  //   // Array of Object type
+  //   } else {
+
+  //     if (__DEV__ && typeof !isNaN(value[0][0])) {
+  //       console.warn(`to argument need to be Number, Array of Number, Object or Array of Object, you can not have Array of other type like ${ typeof value[0][0] } to your object (${ JSON.stringify(value) })`)
+  //     }
+
+      
+  //   }
+  // }
+
+
+
+  // // Object type
+  // if (!Array.isArray(value)) {
+  //   return ValueEnum.ObjectNumber
+
+  // // Array type
+  // } else if (typeof value[0] === 'number') {
+  //   return ValueEnum.ArrayNumber
+
+  // // Path of array type
+  // } else if (Array.isArray(value[0])) {
+  //   return ValueEnum.ArrayPath
+  // }
+
+  // // Path of object type
+  // return ValueEnum.ObjectPath
 }
 
+/**
+ * Format ease input to Easing type
+ */
 const formatEase = (ease: SimpleEase) => {
   if (Array.isArray(ease)) {
+
+    // If array of number create a cubic bezier
     if (!isNaN(ease[0] as number)) {
       return cubicBezier(...(ease as [number, number, number, number]))
     }
@@ -58,6 +149,10 @@ const formatEase = (ease: SimpleEase) => {
           ease: formatEase(data.ease)
         }
       }))
+  }
+
+  if (__DEV__ && !(ease instanceof Function)) {
+    console.warn(`"ease" need to be an Easing function, an array of Easing function, an array of 4 Number to create a Cubic Bezier or an array of multi easing options, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: [ 0.25, 0, 0.3, 1 ], time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not a ${typeof ease}: ${ JSON.stringify(ease) }`)
   }
 
   return ease
@@ -85,13 +180,13 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
     this._update = this._update.bind(this)
 
     this.reference = reference
-    this._valueType = getValueEnum(to)
+    this._valueType = getValueEnum(reference, to)
 
     switch (this._valueType) {
-      case ValueEnum.Object :
+      case ValueEnum.ObjectNumber :
         this._keys = Object.keys(to as Obj) as (keyof ValueType)[]
         break;
-      case ValueEnum.Array :
+      case ValueEnum.ArrayNumber :
         this._keys = [...(to as number[]).keys()]
         break;
       case ValueEnum.ArrayPath :
@@ -123,7 +218,7 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
       )
 
       this._tween.to(this._refToArray(to, options.path) as number[])
-    } else if (this._valueType === ValueEnum.Array || this._valueType === ValueEnum.Object) {
+    } else if (this._valueType === ValueEnum.ArrayNumber || this._valueType === ValueEnum.ObjectNumber) {
       this._tween = new TimelineTween(
         [
           this._valueToArray(reference) as number[],
@@ -151,10 +246,10 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
   }
 
   _refToArray (ref: ValueType | ValueType[], options: AutoTweenOptions["path"] = {}) {
-    const enumType = getValueEnum(ref)
+    const enumType = this._valueType
 
     // Is not path
-    if (enumType === ValueEnum.Array || enumType === ValueEnum.Object) {
+    if (enumType === ValueEnum.ArrayNumber || enumType === ValueEnum.ObjectNumber) {
       return this._valueToArray(ref as ValueType)
     }
     
@@ -162,7 +257,7 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
     if (options?.checkpoint) {
       return CheckpointSmoothPath((ref as ValueType[]).map(this._valueToArray.bind(this)), options)
     } else {
-      return ErodeSmoothPath((ref as ValueType[]).map(this._valueToArray.bind(this)), options)
+      return ErodeSmoothPath((ref as any).map(this._valueToArray.bind(this)), options)
     }
   }
 
@@ -225,7 +320,7 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
    * Create new value like reference from tween value array
    */
   _convertValue (value: number[]): ValueType {
-    if (this._valueType === ValueEnum.Object || this._valueType === ValueEnum.ObjectPath) {
+    if (this._valueType === ValueEnum.ObjectNumber || this._valueType === ValueEnum.ObjectPath) {
       return this._keys.reduce((obj, key, index) => ({ ...obj, [key]: value[index] }), {} as Obj) as ValueType
     }
     

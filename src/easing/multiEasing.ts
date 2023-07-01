@@ -6,6 +6,30 @@ export const multiEasing: MultiEasing = (...list) => {
   let progressValue = 0
   const clean = list.map(data => data instanceof Function ? { time: 1, ease: data, value: 1 } : { time: data.time ?? 1, value: (data.value ?? data.time ?? 1), ease: data.ease })
 
+  if (__DEV__) {
+    clean.forEach((data) => {
+      if (data.ease instanceof Function) {
+        console.warn(`"ease" of multiEasing need to be an Easing function, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: cubicBezier(0.25, 0, 0.3, 1), time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not a ${typeof data.ease}: ${ JSON.stringify(list) }`)
+      }
+
+      if (isNaN(data.time)) {
+        console.warn(`"time" of multiEasing need to be a Number, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: cubicBezier(0.25, 0, 0.3, 1), time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not ${data.time}: ${ JSON.stringify(list) }`)
+      }
+
+      if (isNaN(data.value)) {
+        console.warn(`"value" of multiEasing need to be a Number, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: cubicBezier(0.25, 0, 0.3, 1), time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not ${data.value}: ${ JSON.stringify(list) }`)
+      }
+
+      if (data.time <= 0 || data.time === Infinity) {
+        console.warn(`"time" of multiEasing need to > 0 and < Infinity, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: cubicBezier(0.25, 0, 0.3, 1), time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not ${data.time}: ${ JSON.stringify(list) }`)
+      }
+
+      if (data.value <= 0 || data.value === Infinity) {
+        console.warn(`"value" of multiEasing need to > 0 and < Infinity, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: cubicBezier(0.25, 0, 0.3, 1), time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not ${data.value}: ${ JSON.stringify(list) }`)
+      }
+    })
+  }
+
   const totalTime = clean.reduce((total, data) => total + data.time, 0)
   const totalValue = clean.reduce((total, data) => total + data.value, 0)
   const all = clean.map(({ ease, time, value }) => {

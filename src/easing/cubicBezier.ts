@@ -33,7 +33,15 @@ import type { Easing } from '../types.js'
 // }
 
 export const cubicBezier: (x1: number, y1: number, x2: number, y2: number) => Easing = (x1, y1, x2, y2) => {
-  
+
+  if (__DEV__ && (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2))) {
+    console.warn(`Cubic bezier need to have 4 numbers, example: "0.25, 0, 0.25, 1", and not [${ x1 }, ${ y1 }, ${ x2 }, ${ y2 }]`)
+  }
+
+  if (__DEV__ && (x1 < 0 || x1 > 1 || x2 < 0 || x2 > 1)) {
+    console.warn(`Cubic bezier can not have horizontals Number < 0 or > 1, but you have ${ x1 } and ${ x2 }`)
+  }
+
   x1 = Math.min(Math.max(x1, 0), 1)
   x2 = Math.min(Math.max(x2, 0), 1)
   
