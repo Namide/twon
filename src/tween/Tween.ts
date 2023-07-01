@@ -1,4 +1,4 @@
-import { type TickerType, type TweenOptions, type TweenEmitCallback, type SmoothPathOptions, type PathType, type TimelineOptions, type Easing } from '../types.js'
+import type { TickerType, TweenOptions, TweenEmitCallback, SmoothPathOptions, PathType, TimelineOptions, Easing } from '../types.js'
 import { Emit } from '../core/Emit.js'
 import { TimelineTween } from './TimelineTween.js'
 import { DynamicTween } from './DynamicTween.js'

@@ -1,4 +1,4 @@
-import { type FromToRawPath, type PathType } from "../types.js"
+import type { FromToRawPath, PathType } from "../types.js"
 import { cleanPathNumber } from "./pathHelper.js"
 
 /**

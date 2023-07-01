@@ -1,4 +1,4 @@
-import { type EmitCallback } from '../types.js'
+import type { EmitCallback } from '../types.js'
 
 export class Emit<Callback extends EmitCallback<string, any>> {
   protected list: Array<{ event: Callback['event'], callback: Callback['callback'] }> = []

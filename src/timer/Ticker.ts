@@ -1,5 +1,5 @@
 import { Emit } from '../core/Emit.js'
-import { type EmitCallback, type TickerEvent, type TickerType } from '../types.js'
+import type { EmitCallback, TickerEvent, TickerType } from '../types.js'
 
 type EmitCb = EmitCallback<'update', number> | EmitCallback<TickerEvent, void>
 

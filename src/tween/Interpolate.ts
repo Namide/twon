@@ -1,4 +1,4 @@
-import { type InterpolateOptions, type Easing, type InterpolateType, type PathType, type TweenPathInput } from '../types.js'
+import type { InterpolateOptions, Easing, InterpolateType, PathType, TweenPathInput } from '../types.js'
 import { easeInOutSine } from '../easing/easing.js'
 import { FromToPath } from '../path/FromToPath.js'
 

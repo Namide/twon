@@ -1,4 +1,4 @@
-import { type Easing } from '../types.js'
+import type { Easing } from '../types.js'
 
 const { PI, cos, sin, sqrt } = Math
 const C1 = 1.70158

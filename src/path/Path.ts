@@ -1,4 +1,4 @@
-import { type PathType } from "../types.js"
+import type { PathType } from "../types.js"
 import { cleanPathNumber } from "./pathHelper.js"
 
 function _lerpUnit (from: number[], to: number[], t: number) {

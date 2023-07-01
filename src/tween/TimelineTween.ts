@@ -1,4 +1,4 @@
-import { type TweenType, type TickerType, type TweenOptions, type TweenEmitCallback, type TweenPathInput } from '../types.js'
+import type { TweenType, TickerType, TweenOptions, TweenEmitCallback, TweenPathInput } from '../types.js'
 import { Emit } from '../core/Emit.js'
 import { SimpleTween } from './SimpleTween.js'
 import { Ticker } from '../timer/Ticker.js'

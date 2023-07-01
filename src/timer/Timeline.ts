@@ -1,4 +1,4 @@
-import { type TimelineOptions } from '../types.js'
+import type { TimelineOptions } from '../types.js'
 import { Ticker } from './Ticker.js'
 
 export class Timeline extends Ticker {

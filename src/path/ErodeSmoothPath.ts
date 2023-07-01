@@ -1,4 +1,4 @@
-import { type PathType, type SmoothPathOptions } from "../types.js"
+import type { PathType, SmoothPathOptions } from "../types.js"
 import { Path } from "./Path.js"
 
 const POWER = 0.275
