@@ -8,7 +8,7 @@ export const multiEasing: MultiEasing = (...list) => {
 
   if (__DEV__) {
     clean.forEach((data) => {
-      if (data.ease instanceof Function) {
+      if (!(data.ease instanceof Function)) {
         console.warn(`"ease" of multiEasing need to be an Easing function, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: cubicBezier(0.25, 0, 0.3, 1), time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not a ${typeof data.ease}: ${ JSON.stringify(list) }`)
       }
 
@@ -41,8 +41,6 @@ export const multiEasing: MultiEasing = (...list) => {
       ease
     }
   })
-
-  console.log(all, clean, totalValue)
 
   return (progress: number) => {
     if (progress < 0) return 0
