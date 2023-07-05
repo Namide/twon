@@ -4,14 +4,13 @@ import { SimpleTween } from './SimpleTween.js'
 import { Ticker } from '../timer/Ticker.js'
 
 export class TimelineTween<ValueType extends (number | number[])> extends Emit<TweenEmitCallback<ValueType>> implements TweenType<ValueType> {
+  private readonly _tweens = [] as Array<SimpleTween<ValueType>>
 
-  private _tweens = [] as SimpleTween<ValueType>[]
-
-  private _update = this.emit.bind(this, 'update')
-  private _play = this.emit.bind(this, 'play')
-  private _pause = this.emit.bind(this, 'pause')
-  private _start = this.emit.bind(this, 'start')
-  private _end = this.emit.bind(this, 'end')
+  private readonly _update = this.emit.bind(this, 'update')
+  private readonly _play = this.emit.bind(this, 'play')
+  private readonly _pause = this.emit.bind(this, 'pause')
+  private readonly _start = this.emit.bind(this, 'start')
+  private readonly _end = this.emit.bind(this, 'end')
 
   constructor (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
     super()
@@ -37,16 +36,15 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
     return this._currentTween.isEnded
   }
 
-  get timer (): TickerType | null {
-    return this._currentTween.timer
-  }
-
   get _lastTween () {
     return this._tweens[this._tweens.length - 1]
   }
 
-  set timer (timer: TickerType | null) {
+  get timer (): TickerType | null {
+    return this._currentTween.timer
+  }
 
+  set timer (timer: TickerType | null) {
     const oldTimer = this._currentTween.timer
     if (oldTimer !== null) {
       oldTimer.off('update', this._update)
@@ -68,7 +66,7 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
       this._lastTween.on('end', this._end)
     }
 
-    this._tweens.forEach(tween => tween.timer = timer)
+    this._tweens.forEach(tween => { tween.timer = timer })
   }
 
   to (value: ValueType, options: TweenOptions = {}) {
@@ -78,7 +76,7 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
     const oldValue = lastTween.interpolate.getValueByProgress(1)
     const timer = this._tweens[0].timer
     this._tweens.push(new SimpleTween(
-      [ oldValue, value ],
+      [oldValue, value],
       {
         ...options,
         timer,
@@ -122,7 +120,7 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
   //   if (time < this._startTime + this.interpolate.delay) {
   //     return
   //   }
-    
+
   //   const value = this.getValue(time - this._startTime)
 
   //   // After
@@ -137,7 +135,6 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
   //     }
   //     return
   //   }
-
 
   //   // Start
   //   if (!this.isStarted) {

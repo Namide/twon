@@ -12,7 +12,7 @@ export class Interpolate<ValueType extends number | number[]> implements Interpo
     this.duration = duration
     this.delay = delay
     this.ease = ease
-    this.path = Array.isArray(rawPath) ? FromToPath(rawPath as unknown as ([number, number] | [number[], number[]])) : rawPath 
+    this.path = Array.isArray(rawPath) ? FromToPath(rawPath as unknown as ([number, number] | [number[], number[]])) : rawPath
   }
 
   getValue (time: number): ValueType {
@@ -22,6 +22,6 @@ export class Interpolate<ValueType extends number | number[]> implements Interpo
   }
 
   getValueByProgress (progress: number) {
-    return (this.path.wasNumberList === true ? this.path(progress)[0] : this.path(progress)) as ValueType
+    return (this.path.wasNumberList ? this.path(progress)[0] : this.path(progress)) as ValueType
   }
 }

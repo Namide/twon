@@ -1,5 +1,5 @@
-import type { PathType, SmoothPathOptions } from "../types.js"
-import { Path } from "./Path.js"
+import type { PathType, SmoothPathOptions } from '../types.js'
+import { Path } from './Path.js'
 
 const POWER = 0.275
 
@@ -7,13 +7,13 @@ function _smoothPath (path: number[][], { step, keepStart, keepEnd, loop }: { st
   if (step < 1) {
     return path
   }
-  
+
   const newPath: number[][] = keepStart && !loop ? [path[0]] : []
 
   for (let i = 0; i < path.length - (loop ? 0 : 1); i++) {
     const prev = path[i]
     const next = path[(i + 1) % path.length]
-    const a: number[] = [] 
+    const a: number[] = []
     const b: number[] = []
     for (let unit = 0; unit < prev.length; unit++) {
       const from = prev[unit]

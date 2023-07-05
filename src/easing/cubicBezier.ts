@@ -33,18 +33,17 @@ import type { Easing } from '../types.js'
 // }
 
 export const cubicBezier: (x1: number, y1: number, x2: number, y2: number) => Easing = (x1, y1, x2, y2) => {
-
   if (__DEV__ && (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2))) {
-    console.warn(`Cubic bezier need to have 4 numbers, example: "0.25, 0, 0.25, 1", and not [${ x1 }, ${ y1 }, ${ x2 }, ${ y2 }]`)
+    console.warn(`Cubic bezier need to have 4 numbers, example: "0.25, 0, 0.25, 1", and not [${x1}, ${y1}, ${x2}, ${y2}]`)
   }
 
   if (__DEV__ && (x1 < 0 || x1 > 1 || x2 < 0 || x2 > 1)) {
-    console.warn(`Cubic bezier can not have horizontals Number < 0 or > 1, but you have ${ x1 } and ${ x2 }`)
+    console.warn(`Cubic bezier can not have horizontals Number < 0 or > 1, but you have ${x1} and ${x2}`)
   }
 
   x1 = Math.min(Math.max(x1, 0), 1)
   x2 = Math.min(Math.max(x2, 0), 1)
-  
+
   const a = (a1: number, a2: number) => 1 - 3 * a2 + 3 * a1
   const b = (a1: number, a2: number) => 3 * a2 - 6 * a1
   const c = (a1: number) => 3 * a1
@@ -58,8 +57,7 @@ export const cubicBezier: (x1: number, y1: number, x2: number, y2: number) => Ea
 
     for (let i = 0; i < 4; ++i) {
       const currentSlope = getSlope(aGuessT, x1, x2)
-      if (currentSlope === 0)
-        return aGuessT
+      if (currentSlope === 0) { return aGuessT }
       const currentX = calcBezier(aGuessT, x1, x2) - x
       aGuessT -= currentX / currentSlope
     }

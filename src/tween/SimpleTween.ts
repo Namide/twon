@@ -10,8 +10,8 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
 
   private _timer: TickerType | null = null
   private _startTime: number = 0
-  private _play = this.emit.bind(this, 'play')
-  private _pause = this.emit.bind(this, 'pause')
+  private readonly _play = this.emit.bind(this, 'play')
+  private readonly _pause = this.emit.bind(this, 'pause')
   // private readonly _options: TweenOptions
 
   constructor (rawPath: TweenPathInput<ValueType>, options: TweenOptions = {}) {
@@ -46,8 +46,8 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
       this._timer.on('pause', this._pause)
 
       this._startTime += (this.timer?.time ?? 0) - oldTime
-      
-      if (this._timer.setDuration) {
+
+      if (this._timer.setDuration != null) {
         this._timer.setDuration(this.interpolate.delay + this.interpolate.duration)
       }
     }
@@ -75,7 +75,7 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
   // }
 
   getTime (): number {
-    if (!this.timer) {
+    if (this.timer == null) {
       console.warn('getTime() need timer to work otherwise it return 0')
       return 0
     }
@@ -97,7 +97,7 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
     if (time < this._startTime + this.interpolate.delay) {
       return
     }
-    
+
     const value = this.getValue(time - this._startTime)
 
     // After
@@ -106,13 +106,12 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
         this.emit('update', value)
         this.emit('end', value)
         this.isEnded = true
-        if (this.timer?.autoDispose) {
+        if (this.timer?.autoDispose !== true) {
           this.dispose()
         }
       }
       return
     }
-
 
     // Start
     if (!this.isStarted) {

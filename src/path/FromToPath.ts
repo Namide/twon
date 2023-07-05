@@ -1,11 +1,10 @@
-import type { FromToRawPath, PathType } from "../types.js"
-import { cleanPathNumber } from "./pathHelper.js"
+import type { FromToRawPath, PathType } from '../types.js'
+import { cleanPathNumber } from './pathHelper.js'
 
 /**
  * Path with only 2 values
  */
 export function FromToPath (path: FromToRawPath): PathType {
-
   const { path: [from, to], wasNumberList } = cleanPathNumber(path)
 
   const getPath = (x: number) => {

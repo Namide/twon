@@ -1,21 +1,19 @@
-import type { PathType, SmoothPathOptions } from "../types.js"
-import { ErodeSmoothPath } from "./ErodeSmoothPath.js"
+import type { PathType, SmoothPathOptions } from '../types.js'
+import { ErodeSmoothPath } from './ErodeSmoothPath.js'
 
 const POWER = 0.275
 
-function _getDistances(p1: number[], p0: number[] = []) {
+function _getDistances (p1: number[], p0: number[] = []) {
+  let distance = 0
+  for (let i = 0; i < p1.length; i++) {
+    distance += (p1[i] - (p0[i] ?? 0)) ** 2
+  }
+  distance = Math.sqrt(distance)
 
-    let distance = 0
-    for (let i = 0; i < p1.length; i++) {
-        distance += (p1[i] - (p0[i] ?? 0)) ** 2 
-    }
-    distance = Math.sqrt(distance)  
-
-    return distance
+  return distance
 }
 
 export function CheckpointSmoothPath (path: number[][], { step = 3, keepStart = true, keepEnd = true, loop = false }: SmoothPathOptions = {}): PathType {
-  
   if (step < 1) {
     return ErodeSmoothPath(path, { step, keepStart, keepEnd, loop })
   }
@@ -35,7 +33,7 @@ export function CheckpointSmoothPath (path: number[][], { step = 3, keepStart = 
 
     newPath.push(
       current.map((curr, i) => curr - nextVector[i]),
-      current.map((curr, i) => curr + nextVector[i]),
+      current.map((curr, i) => curr + nextVector[i])
     )
   }
 

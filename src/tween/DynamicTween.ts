@@ -19,22 +19,22 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   private _timer: TickerType | null = null
 
   private _startTime: number = 0 // Started time of the dynamic tween in the timer
-  private _play = this.emit.bind(this, 'play')
-  private _pause = this.emit.bind(this, 'pause')
+  private readonly _play = this.emit.bind(this, 'play')
+  private readonly _pause = this.emit.bind(this, 'pause')
   private readonly _options: DynamicTweenOptions
 
   private readonly _frozenList: Frozen[]
   private readonly _isArray: boolean
 
-  private readonly interpolates: Interpolate<number[]>[] = []
+  private readonly interpolates: Array<Interpolate<number[]>> = []
 
   constructor (from: ValueType, options: DynamicTweenOptions = {}) {
     super()
 
     this._options = {
-      ...options,
+      ...options
       // msPerUnit: options.msPerUnit ?? 20
-    } as DynamicTweenOptions
+    }
 
     this._isArray = Array.isArray(from)
 
@@ -151,7 +151,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   private _getValues (time: number): number[] {
     const frozen = this._getFrozen(time).value
 
-    if (this.timer?.autoDispose) {
+    if (this.timer?.autoDispose !== true) {
       this._autoDispose(time)
     }
 
@@ -164,7 +164,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   getTime (): number {
-    if (!this.timer) {
+    if (this.timer == null) {
       console.warn('getTime() need timer to work otherwise it return 0')
       return 0
     }
