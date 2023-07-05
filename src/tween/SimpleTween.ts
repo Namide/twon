@@ -47,7 +47,7 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
 
       this._startTime += (this.timer?.time ?? 0) - oldTime
 
-      if (this._timer.setDuration != null) {
+      if (this._timer.setDuration !== undefined) {
         this._timer.setDuration(this.interpolate.delay + this.interpolate.duration)
       }
     }
@@ -75,7 +75,7 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
   // }
 
   getTime (): number {
-    if (this.timer == null) {
+    if (this.timer === null) {
       console.warn('getTime() need timer to work otherwise it return 0')
       return 0
     }
@@ -106,7 +106,7 @@ export class SimpleTween<ValueType extends (number | number[])> extends Emit<Twe
         this.emit('update', value)
         this.emit('end', value)
         this.isEnded = true
-        if (this.timer?.autoDispose !== true) {
+        if (this.timer?.autoDispose === true) {
           this.dispose()
         }
       }

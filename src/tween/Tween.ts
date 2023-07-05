@@ -188,19 +188,19 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
         break
     }
 
-    if (options.timer == null) {
+    if (options.timer === null || options.timer === undefined) {
       options.timer = new Timeline(options.timeline)
     }
 
-    if (options.ease != null) {
+    if (options.ease !== undefined) {
       options.ease = formatEase(options.ease)
     }
 
-    if (options.isDynamic !== true && (this._valueType === ValueEnum.ArrayPath || this._valueType === ValueEnum.ObjectPath)) {
+    if (options.isDynamic === true && (this._valueType === ValueEnum.ArrayPath || this._valueType === ValueEnum.ObjectPath)) {
       throw new Error('Can not use path for dynamic tween')
     }
 
-    if (options.isDynamic !== true) {
+    if (options.isDynamic === true) {
       this._tween = new DynamicTween(
         this._keys.map((key) =>
           reference[key] as number
@@ -244,7 +244,7 @@ export class Tween<ValueType extends (Obj | number[])> extends Emit<TweenEmitCal
     }
 
     // Is path
-    if (options?.checkpoint !== true) {
+    if (options?.checkpoint === true) {
       return CheckpointSmoothPath((ref as ValueType[]).map(this._valueToArray.bind(this)), options)
     } else {
       return ErodeSmoothPath((ref as any).map(this._valueToArray.bind(this)), options)

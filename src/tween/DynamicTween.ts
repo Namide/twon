@@ -151,7 +151,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   private _getValues (time: number): number[] {
     const frozen = this._getFrozen(time).value
 
-    if (this.timer?.autoDispose !== true) {
+    if (this.timer?.autoDispose === true) {
       this._autoDispose(time)
     }
 
@@ -164,7 +164,7 @@ export class DynamicTween<ValueType extends (number | number[])> extends Emit<Tw
   }
 
   getTime (): number {
-    if (this.timer == null) {
+    if (this.timer === null) {
       console.warn('getTime() need timer to work otherwise it return 0')
       return 0
     }
