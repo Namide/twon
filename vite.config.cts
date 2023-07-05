@@ -10,7 +10,7 @@ module.exports = defineConfig({
   build: {
     sourcemap: true,
     lib: {
-      entry: path.resolve(__dirname, '../src/index.ts'),
+      entry: path.resolve(__dirname, 'src/index.ts'),
       name: 'Twon',
       fileName: (format) => `twon.${format}.js`,
     },

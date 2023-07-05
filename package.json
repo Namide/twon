@@ -17,8 +17,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --project conf/tsconfig.json --noEmit && vite build --config conf/vite.config.cts",
-    "postbuild": "tsc --project conf/tsconfig.json --declaration --allowJs --emitDeclarationOnly --outDir lib",
+    "build": "tsc --project tsconfig.json --noEmit && vite build --config vite.config.cts",
+    "postbuild": "tsc --project tsconfig.json --declaration --allowJs --emitDeclarationOnly --outDir lib",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src --fix"

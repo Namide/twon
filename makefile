@@ -15,6 +15,14 @@ code:
 		node:slim \
 		bash
 
+lint:
+	docker run -ti --rm \
+		-v $(shell pwd):/usr/src/app \
+		-w /usr/src/app \
+		-u "node" \
+		node:slim \
+		npm run lint
+
 build:
 	docker run -ti --rm \
 		-v $(shell pwd):/usr/src/app \

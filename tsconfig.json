@@ -12,7 +12,7 @@
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "skipLibCheck": true,
-    "rootDirs": ["../src"]
+    "rootDirs": ["src"]
   },
-  "include": ["../src"]
+  "include": ["src"]
 }

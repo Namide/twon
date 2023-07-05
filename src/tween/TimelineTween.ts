@@ -25,7 +25,7 @@ export class TimelineTween<ValueType extends (number | number[])> extends Emit<T
   }
 
   get _currentTween () {
-    return this._tweens.find(tween => !tween.isEnded) || this._lastTween
+    return this._tweens.find(tween => !tween.isEnded) ?? this._lastTween
   }
 
   get isStarted (): boolean {
