@@ -135,7 +135,7 @@ const formatEase = (ease: SimpleEase) => {
           return formatEase(data)
         }
         return {
-          time: data.time,
+          duration: data.duration,
           value: data.value,
           ease: formatEase(data.ease)
         }
@@ -143,7 +143,7 @@ const formatEase = (ease: SimpleEase) => {
   }
 
   if (__DEV__ && !(ease instanceof Function)) {
-    console.warn(`"ease" need to be an Easing function, an array of Easing function, an array of 4 Number to create a Cubic Bezier or an array of multi easing options, example: "[{ ease: EaseInExpo, time: 3, value: 2 }, { ease: [ 0.25, 0, 0.3, 1 ], time: 2 }, { ease: EaseOutExpo, value: 4 }]", and not a ${typeof ease}: ${JSON.stringify(ease)}`)
+    console.warn(`"ease" need to be an Easing function, an array of Easing function, an array of 4 Number to create a Cubic Bezier or an array of multi easing options, example: "[{ ease: EaseInExpo, duration: 3, value: 2 }, { ease: [ 0.25, 0, 0.3, 1 ], duration: 2 }, { ease: EaseOutExpo, value: 4 }]", and not a ${typeof ease}: ${JSON.stringify(ease)}`)
   }
 
   return ease
