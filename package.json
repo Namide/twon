@@ -5,12 +5,6 @@
   "type": "module",
   "main": "./lib/twon.umd.js",
   "module": "./lib/twon.es.js",
-  "exports": {
-    ".": {
-      "import": "./lib/twon.es.js",
-      "require": "./lib/twon.umd.js"
-    }
-  },
   "types": "lib/index.d.ts",
   "files": [
     "lib"
